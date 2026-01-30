@@ -40,7 +40,7 @@
     <img src="images/logo.png" alt="Logo" height="120">
   </a>
 <h1 align="center">dpx_biz_onesheet</h1>
-<h3 align="center"><i>a sassy project tag line here</i></h3>
+<h3 align="center"><i>"..oh, you want a manual?.."</i></h3>
   <p align="center">
     one sheet instrucitons for the best buisness card ever
     <br />
