@@ -1,10 +1,9 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
 
-<!--  *** Thanks for checking out the Best-README-Template. If you have a suggestion that would make this better, please fork the repo and create a pull request or simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again! Now go create something AMAZING! :D -->
 
 
 
+<!-- readmetemplate-->
 <!-- /// d   u   b   p   i   x   e   l  ---  f   o   r   k   ////--v0.5.7 -->
 <!--this has additionally been modifed by @dubpixel for hardware use -->
 <!--search dpx_biz_onesheet.. search & replace is COMMAND OPTION F -->
@@ -34,6 +33,8 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 </div>
+
+
 <!-- PROJECT LOGO -->
 <div align="center">
   <a href="https://github.com/dubpixel/dpx_biz_onesheet">
@@ -55,35 +56,8 @@
 </div>
    <br />
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary><h3>Table of Contents</h3></summary>
-<ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>    
-    <li><a href="#reflection">Reflection</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-</ol>
-</details>
 <!-- ABOUT THE PROJECT -->
-<details>
-<summary><h3>About The Project</h3></summary>
-
+<h3>About The Project</h3>
 this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB business card. it's a standalone html page that lets you hover over each touch pad to see what it does—boot combos, HID mappings, MIDI notes, LED colors, and more.
 
 **key features:**
@@ -94,20 +68,18 @@ this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB
 - **works offline** – just open the html file in any browser, no server needed
 
 the dpx_biz is a business card that actually does something—it's a USB HID device that can send keystrokes, mouse clicks, or MIDI notes. this onesheet helps new users figure out what each pad does without reading a full manual.
+<details>
+<summary>Images</summary>
 
-</br>
 
-*author(s): // www.dubpixel.tv  - i@dubpixel.tv* 
-</br>
-<h3>Images</h3>
+  
+  ### FRONT
+  ![FRONT][product-front]
 
-### FRONT
-![FRONT][product-front]
 </details>
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With 
- 
+
  * vanilla html/css/javascript
  * no frameworks, no dependencies, no build step
  * just open and go
@@ -142,7 +114,6 @@ the dpx_biz is a business card that actually does something—it's a USB HID dev
   2. open `src/dpx-interactive.html` in your browser
   3. hover over the pads to explore
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
