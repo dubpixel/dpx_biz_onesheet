@@ -159,10 +159,10 @@ _see the interactive page for the complete pad→key→midi mapping table_
   - _percentage-based positioning > pixel-based for responsive layouts_
 * what do we like/hate?
   - _like: soft glowing halos are fun_
-  - _hate: tooltip positioning edge cases are endless_
+  - _hate: tooltip positioning edge cases are not_
 * what would/could we do differently?
   - _maybe use svg overlays instead of div hotspots_
-  - _consider a dark mode toggle_
+  - _finsh the roadmap for once_
   <!-- ROADMAP -->
 ## Roadmap
 
