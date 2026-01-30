@@ -61,7 +61,7 @@
       margin: 0 auto;
       border-radius: 12px;
       border: 2px solid #333;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .pcb-map img { 
@@ -69,6 +69,7 @@
       height: auto; 
       display: block;
       border-radius: 10px;
+      clip-path: inset(0 round 10px);
     }
 
     /* Hotspots container - positions hotspots over image */
@@ -126,7 +127,7 @@
       visibility: hidden;
       transform: translateX(-50%) scale(0.85);
       transform-origin: top center;
-      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.2s;
+      transition: opacity 0.75s ease, transform 0.75s ease, visibility 0.75s;
       z-index: 1000;
       pointer-events: none;
       white-space: nowrap;
@@ -141,6 +142,7 @@
       opacity: 1; 
       visibility: visible; 
       transform: translateX(-50%) scale(1);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.2s;
     }
 
     /* Position adjustments */
@@ -746,15 +748,15 @@
         
         let positionClasses = [];
         
-        // Check horizontal bounds
-        if (parseFloat(leftPct) < 15) {
+        // Check horizontal bounds - be aggressive to prevent clipping
+        if (parseFloat(leftPct) < 25) {
           positionClasses.push('tt-left'); // align left edge
-        } else if (parseFloat(leftPct) > 85) {
+        } else if (parseFloat(leftPct) > 70) {
           positionClasses.push('tt-right'); // align right edge
         }
         
         // Check vertical bounds - if near bottom, show tooltip above
-        if (parseFloat(topPct) > 70) {
+        if (parseFloat(topPct) > 55) {
           positionClasses.push('tt-above');
         }
           
