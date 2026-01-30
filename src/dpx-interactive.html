@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dpx_biz interactive reference v2.0</title>
+  <title>dpx_biz interactive reference v2.0.2</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -52,6 +52,8 @@
     /* PCB Image Section - Full width on top */
     .pcb-section {
       margin-bottom: 24px;
+      padding: 30px;
+      overflow: visible;
     }
 
     .pcb-map {
@@ -69,7 +71,6 @@
       height: auto; 
       display: block;
       border-radius: 10px;
-      clip-path: inset(0 round 10px);
     }
 
     /* Hotspots container - positions hotspots over image */
@@ -103,16 +104,21 @@
       height: 200%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(201, 162, 39, 0.6) 0%, rgba(201, 162, 39, 0.25) 35%, rgba(201, 162, 39, 0) 70%);
-      box-shadow: 0 0 25px rgba(201, 162, 39, 0.4), 0 0 50px rgba(201, 162, 39, 0.15);
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.8) 0%, rgba(201, 162, 39, 0.4) 35%, rgba(201, 162, 39, 0) 70%);
+      box-shadow: 0 0 35px rgba(201, 162, 39, 0.6), 0 0 60px rgba(201, 162, 39, 0.25);
       opacity: 0;
       transition: opacity 0.5s ease, transform 0.5s ease;
       pointer-events: none;
     }
 
+    @keyframes haloPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.85; }
+      50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    }
+
     .hotspot:hover::before {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1.1);
+      animation: haloPulse 2s ease-in-out infinite;
     }
 
     /* Tooltip */
@@ -123,6 +129,7 @@
       border-radius: 8px;
       padding: 12px 16px;
       min-width: 200px;
+      max-width: calc(100vw - 40px);
       opacity: 0;
       visibility: hidden;
       transform: translateX(-50%) scale(0.85);
@@ -155,7 +162,7 @@
       transform: translateX(-50%) scale(1);
     }
     .tt-left .tooltip { 
-      left: 0; 
+      left: -10px; 
       transform: translateX(0) scale(0.85);
       transform-origin: top left;
     }
@@ -692,7 +699,7 @@
   <footer class="footer">
     <img src="images/logo.png" alt="dubpixel" class="footer-logo">
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v2.0</div>
+    <div class="footer-version">v2.0.2</div>
   </footer>
 
   <script>
