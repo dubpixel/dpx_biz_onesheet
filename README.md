@@ -109,7 +109,7 @@ _the dpx_biz is a business card that actually does something—it's a USB HID de
   * a dpx_biz card (contact i@dubpixel.tv for details)
   * usb-c cable
   
-  ### Installation
+### Installation
 
   1. clone or download this repo
   2. open `src/dpx-interactive.html` in your browser
@@ -158,7 +158,7 @@ _see the interactive page for the complete pad→key→midi mapping table_
   - _hover effects are surprisingly finicky at image boundaries_
   - _percentage-based positioning > pixel-based for responsive layouts_
 * what do we like/hate?
-  - _like: soft glowing halos look pro_
+  - _like: soft glowing halos are fun_
   - _hate: tooltip positioning edge cases are endless_
 * what would/could we do differently?
   - _maybe use svg overlays instead of div hotspots_
@@ -170,10 +170,8 @@ _see the interactive page for the complete pad→key→midi mapping table_
 - [x] soft glowing halos on hover
 - [x] smart tooltip positioning (no clipping)
 - [x] config.txt reference page
-- [ ] dark mode toggle
-- [ ] mobile/touch-friendly version
-- [ ] embed short video demo
-- [ ] integrate with github pages for live hosting
+- [ ] correct popup bounds for narrow portait clipping
+- [ ] insert URL into readme
 
 See the [open issues](https://github.com/dubpixel/dpx_biz_onesheet/issues) for a full list of proposed features (and known issues).
 
