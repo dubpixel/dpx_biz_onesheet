@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dpx_biz interactive reference v1.9</title>
+  <title>dpx_biz interactive reference v2.0</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -81,24 +81,37 @@
       /* No transform - positions are pre-scaled in HTML */
     }
 
-    /* Hotspots - small fingerprint-style dots */
+    /* Hotspots - trigger area stays same size, glow is 2x via pseudo-element */
     .hotspot {
       position: absolute;
       cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.15s ease;
-      /* Small dot size - 5% wide, 8.7% tall for visual circle on 1176x676 */
+      /* Trigger area size - 5% wide, 8.7% tall for visual circle on 1176x676 */
       width: 5%;
       height: 8.7%;
       border-radius: 50%;
-      /* DEBUG MODE - remove this line when alignment is confirmed */
-      background: rgba(255, 0, 0, 0.3) !important;
+      background: transparent;
     }
 
-    .hotspot:hover {
-      border-color: var(--gold);
-      box-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
-      background: rgba(201, 162, 39, 0.15) !important;
+    /* The glow halo - 2x larger than trigger area, hidden by default */
+    .hotspot::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.6) 0%, rgba(201, 162, 39, 0.25) 35%, rgba(201, 162, 39, 0) 70%);
+      box-shadow: 0 0 25px rgba(201, 162, 39, 0.4), 0 0 50px rgba(201, 162, 39, 0.15);
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .hotspot:hover::before {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
     }
 
     /* Tooltip */
@@ -111,31 +124,50 @@
       min-width: 200px;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.15s ease;
+      transform: translateX(-50%) scale(0.85);
+      transform-origin: top center;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.2s;
       z-index: 1000;
       pointer-events: none;
       white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(201, 162, 39, 0.15);
       /* Default: below the hotspot */
       top: calc(100% + 10px);
       left: 50%;
       transform: translateX(-50%);
     }
 
-    .hotspot:hover .tooltip { opacity: 1; visibility: visible; }
+    .hotspot:hover .tooltip { 
+      opacity: 1; 
+      visibility: visible; 
+      transform: translateX(-50%) scale(1);
+    }
 
     /* Position adjustments */
     .tt-above .tooltip { 
       top: auto;
-      bottom: calc(100% + 10px); 
+      bottom: calc(100% + 10px);
+      transform-origin: bottom center;
+    }
+    .tt-above:hover .tooltip {
+      transform: translateX(-50%) scale(1);
     }
     .tt-left .tooltip { 
       left: 0; 
-      transform: translateX(0); 
+      transform: translateX(0) scale(0.85);
+      transform-origin: top left;
+    }
+    .tt-left:hover .tooltip {
+      transform: translateX(0) scale(1);
     }
     .tt-right .tooltip { 
       left: auto; 
       right: 0; 
-      transform: translateX(0); 
+      transform: translateX(0) scale(0.85);
+      transform-origin: top right;
+    }
+    .tt-right:hover .tooltip {
+      transform: translateX(0) scale(1);
     }
 
     .tooltip-header {
@@ -478,7 +510,7 @@
     <!-- PCB Image Section -->
     <div class="pcb-section">
       <div class="pcb-map">
-        <img src="pcb-photo.png" alt="dpx_biz PCB">
+        <img src="images/pcb-photo.png" alt="dpx_biz PCB">
         
         <!-- Hotspots loaded from hotspots.tsv via JavaScript -->
         <div class="hotspots-container" id="hotspotsContainer">
@@ -656,9 +688,9 @@
   </div>
 
   <footer class="footer">
-    <img src="logo.png" alt="dubpixel" class="footer-logo">
+    <img src="images/logo.png" alt="dubpixel" class="footer-logo">
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v1.9</div>
+    <div class="footer-version">v2.0</div>
   </footer>
 
   <script>
@@ -706,6 +738,25 @@
         // Convert to percentages (center the dot)
         const leftPct = ((coords.x / IMG_WIDTH) * 100 - 2.5).toFixed(1);
         const topPct = ((coords.y / IMG_HEIGHT) * 100 - 4.35).toFixed(1);
+        
+        // Calculate tooltip positioning classes based on bounds
+        // Tooltip is ~200px wide, check if it would overflow edges
+        const tooltipWidthPct = (200 / container.offsetWidth) * 100;
+        const tooltipHeightPct = 25; // rough estimate for tooltip height %
+        
+        let positionClasses = [];
+        
+        // Check horizontal bounds
+        if (parseFloat(leftPct) < 15) {
+          positionClasses.push('tt-left'); // align left edge
+        } else if (parseFloat(leftPct) > 85) {
+          positionClasses.push('tt-right'); // align right edge
+        }
+        
+        // Check vertical bounds - if near bottom, show tooltip above
+        if (parseFloat(topPct) > 70) {
+          positionClasses.push('tt-above');
+        }
           
         const hotspot = document.createElement('div');
         hotspot.className = 'hotspot';
@@ -713,7 +764,7 @@
         hotspot.style.top = topPct + '%';
         
         hotspot.innerHTML = `
-          <div class="tooltip ${data.ttClass}">
+          <div class="tooltip ${positionClasses.join(' ')}">
             <div class="tooltip-header">
               <span class="tooltip-pad">pad ${data.label}</span>
               <span class="tooltip-led">${data.led}</span>
