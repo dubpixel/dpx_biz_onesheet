@@ -52,7 +52,10 @@
     <a href="https://github.com/dubpixel/dpx_biz_onesheet/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
     <a href="https://github.com/dubpixel/dpx_biz_onesheet/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-    </p>
+     ·
+    <a href="https://dpx-biz-onesheet.pages.dev/">Live Demo</a>
+  
+  </p>
 </div>
    <br />
 <!-- TABLE OF CONTENTS -->
@@ -171,7 +174,8 @@ _see the interactive page for the complete pad→key→midi mapping table_
 - [x] smart tooltip positioning (no clipping)
 - [x] config.txt reference page
 - [ ] correct popup bounds for narrow portait clipping
-- [ ] insert URL into readme
+- [x] insert URL into readme
+- [x] add links and firmware
 
 See the [open issues](https://github.com/dubpixel/dpx_biz_onesheet/issues) for a full list of proposed features (and known issues).
 
