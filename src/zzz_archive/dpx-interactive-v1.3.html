@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dpx_biz Interactive Reference v1.3</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #1a1a1a;
+      --gold: #c9a227;
+      --blue: #4a9eff;
+      --green: #4aff7a;
+      --red: #ff4a4a;
+      --yellow: #ffdd4a;
+      --white: #ffffff;
+      --text: #e0e0e0;
+      --text-dim: #888888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header { text-align: center; margin-bottom: 20px; }
+
+    .header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .main-container {
+      display: flex;
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 1000px) {
+      .main-container { flex-direction: column; }
+      .side-panel { width: 100% !important; }
+    }
+
+    .pcb-wrapper { flex: 1; max-width: 800px; }
+
+    .pcb-map {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #333;
+    }
+
+    .pcb-map img { width: 100%; height: auto; display: block; }
+
+    /* Hotspots */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.15s ease;
+      border-radius: 50%;
+    }
+
+    .hotspot:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
+      background: rgba(201, 162, 39, 0.1);
+    }
+
+    .hotspot-rect { border-radius: 4px; }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 10, 10, 0.95);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 12px 16px;
+      min-width: 220px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.15s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .hotspot:hover .tooltip { opacity: 1; visibility: visible; }
+
+    .tooltip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .tooltip-pad {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--gold);
+    }
+
+    .tooltip-led {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+    }
+
+    .tooltip-led.has-led { color: var(--green); }
+    .tooltip-led.no-led { color: var(--red); }
+
+    .tooltip-config {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #333;
+    }
+
+    .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin: 5px 0;
+    }
+
+    .tooltip-label { color: var(--text-dim); }
+
+    .tooltip-value {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--white);
+    }
+
+    .tooltip-value.hid { color: var(--blue); }
+    .tooltip-value.midi { color: var(--green); }
+    .tooltip-value.func { color: var(--yellow); font-size: 0.75rem; }
+
+    .tooltip-left .tooltip { left: 0; transform: translateX(0); }
+    .tooltip-right .tooltip { left: auto; right: 0; transform: translateX(0); }
+    .tooltip-below .tooltip { bottom: auto; top: calc(100% + 8px); }
+
+    /* Side Panel */
+    .side-panel {
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 18px;
+      border: 1px solid #333;
+    }
+
+    .card-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    /* Boot Combos */
+    .combo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid;
+    }
+
+    .combo-row:last-child { margin-bottom: 0; }
+
+    .combo-config { border-left-color: var(--blue); }
+    .combo-reset { border-left-color: var(--red); }
+    .combo-midi { border-left-color: var(--yellow); }
+
+    .combo-pads { display: flex; gap: 4px; align-items: center; }
+
+    .combo-pad {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 11px;
+      background: #2a2a2a;
+      border: 2px solid;
+    }
+
+    .combo-config .combo-pad { border-color: var(--blue); color: var(--blue); }
+    .combo-reset .combo-pad { border-color: var(--red); color: var(--red); }
+    .combo-midi .combo-pad { border-color: var(--yellow); color: var(--yellow); }
+
+    .combo-plus { font-size: 12px; color: var(--text-dim); }
+    .combo-info { flex: 1; }
+    .combo-name { font-weight: 600; font-size: 0.85rem; }
+
+    .combo-config .combo-name { color: var(--blue); }
+    .combo-reset .combo-name { color: var(--red); }
+    .combo-midi .combo-name { color: var(--yellow); }
+
+    .combo-desc { font-size: 0.7rem; color: var(--text-dim); margin-top: 2px; }
+
+    .combo-colors {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 0.65rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+    }
+
+    .color-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .color-dot.blink { animation: blink 0.8s infinite; }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0.2; }
+    }
+
+    .syntax-pattern {
+      background: #0d0d0d;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .syntax-link {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      background: rgba(201, 162, 39, 0.1);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .syntax-link:hover { background: rgba(201, 162, 39, 0.2); }
+
+    .tip-item {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #222;
+      font-size: 0.75rem;
+    }
+
+    .tip-item:last-child { border-bottom: none; }
+    .tip-icon { color: var(--red); font-weight: bold; }
+    .tip-item strong { color: var(--green); }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #222;
+    }
+
+    .footer-logo { height: 36px; width: auto; }
+    .footer-tagline { font-size: 0.7rem; color: var(--text-dim); margin-top: 6px; }
+    .footer-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>dpx_biz</h1>
+    <p class="subtitle">hover over components to learn more</p>
+  </header>
+
+  <div class="main-container">
+    <div class="pcb-wrapper">
+      <div class="pcb-map">
+        <img src="pcb-photo.png" alt="dpx_biz PCB">
+        
+        <!-- x.1 = pad_0 (up arrow, top-left) -->
+        <div class="hotspot" style="left: 1.5%; top: 2%; width: 14%; height: 33%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.1</span>
+              <span class="tooltip-led has-led">LED 0</span>
+            </div>
+            <div class="tooltip-config">pad_0_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">ctrl+alt+↑</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 60</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">3</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Layer Up</span></div>
+          </div>
+        </div>
+
+        <!-- x.2 = pad_1 -->
+        <div class="hotspot" style="left: 15.5%; top: 2.5%; width: 13%; height: 22%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.2</span>
+              <span class="tooltip-led has-led">LED 1</span>
+            </div>
+            <div class="tooltip-config">pad_1_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">alt+s</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 61</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">2</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Split Section</span></div>
+          </div>
+        </div>
+
+        <!-- x.3 = pad_2 -->
+        <div class="hotspot" style="left: 28.5%; top: 0.5%; width: 13%; height: 22%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.3</span>
+              <span class="tooltip-led has-led">LED 2</span>
+            </div>
+            <div class="tooltip-config">pad_2_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">alt+m</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 62</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">1</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Merge Section</span></div>
+          </div>
+        </div>
+
+        <!-- x.4 = pad_3 -->
+        <div class="hotspot tooltip-right" style="left: 41.5%; top: 4.5%; width: 11%; height: 18%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.4</span>
+              <span class="tooltip-led has-led">LED 3</span>
+            </div>
+            <div class="tooltip-config">pad_3_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">ctrl+alt+[</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 64</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">4</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Trim Container</span></div>
+          </div>
+        </div>
+
+        <!-- x.5 = pad_4 -->
+        <div class="hotspot tooltip-right" style="left: 50%; top: 25.5%; width: 9.5%; height: 15%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.5</span>
+              <span class="tooltip-led has-led">LED 4</span>
+            </div>
+            <div class="tooltip-config">pad_4_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">o</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 65</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">9</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">End of Container</span></div>
+          </div>
+        </div>
+
+        <!-- x.6 = pad_5 (large left) -->
+        <div class="hotspot tooltip-below" style="left: 1.5%; top: 35.5%; width: 17%; height: 29%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.6</span>
+              <span class="tooltip-led has-led">LED 9</span>
+            </div>
+            <div class="tooltip-config">pad_5_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">period (.)</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 66</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">7</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Next Section</span></div>
+          </div>
+        </div>
+
+        <!-- x.7 = pad_6 (large center) -->
+        <div class="hotspot" style="left: 17.5%; top: 21.5%; width: 16%; height: 27%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.7</span>
+              <span class="tooltip-led has-led">LED 8</span>
+            </div>
+            <div class="tooltip-config">pad_6_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">comma (,)</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 67</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">6</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Previous Section</span></div>
+          </div>
+        </div>
+
+        <!-- x.8 = pad_7 -->
+        <div class="hotspot" style="left: 32%; top: 27.5%; width: 14%; height: 23%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.8</span>
+              <span class="tooltip-led has-led">LED 7</span>
+            </div>
+            <div class="tooltip-config">pad_7_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">alt+t</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 69</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">5</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Repeat Prev Tag</span></div>
+          </div>
+        </div>
+
+        <!-- x.9 = pad_8 (large bottom) -->
+        <div class="hotspot tooltip-below" style="left: 25%; top: 54.5%; width: 19%; height: 31%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.9</span>
+              <span class="tooltip-led has-led">LED 6</span>
+            </div>
+            <div class="tooltip-config">pad_8_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">space</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 70</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">10</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Play Section</span></div>
+          </div>
+        </div>
+
+        <!-- x.10 = pad_9 (small near MCU) -->
+        <div class="hotspot tooltip-below tooltip-right" style="left: 49%; top: 42%; width: 9%; height: 14%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.10</span>
+              <span class="tooltip-led has-led">LED 5</span>
+            </div>
+            <div class="tooltip-config">pad_9_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">ctrl+alt+↓</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 69</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">11</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Func</span><span class="tooltip-value func">Layer Down</span></div>
+          </div>
+        </div>
+
+        <!-- x.11 = pad_10 (QR area - down arrow shape) -->
+        <div class="hotspot tooltip-below tooltip-right" style="left: 45%; top: 66.5%; width: 14%; height: 25%;">
+          <div class="tooltip">
+            <div class="tooltip-header">
+              <span class="tooltip-pad">Pad x.11</span>
+              <span class="tooltip-led no-led">No LED</span>
+            </div>
+            <div class="tooltip-config">pad_10_*</div>
+            <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">esc</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">Note 70</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">18</span></div>
+          </div>
+        </div>
+
+        <!-- x.12 = pad_11 (logo area - hidden) -->
+        <!-- Not showing hotspot as it's the logo/QR area touch zone -->
+
+        <!-- SW2 / Reset -->
+        <div class="hotspot hotspot-rect tooltip-right" style="left: 55%; top: 0%; width: 8%; height: 8%;">
+          <div class="tooltip">
+            <div class="tooltip-header"><span class="tooltip-pad">SW2 (reset)</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Function</span><span class="tooltip-value">Bootloader</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Usage</span><span class="tooltip-value">Hold on power-up</span></div>
+          </div>
+        </div>
+
+        <!-- USB -->
+        <div class="hotspot hotspot-rect tooltip-right" style="left: 87%; top: 0%; width: 12%; height: 10%;">
+          <div class="tooltip">
+            <div class="tooltip-header"><span class="tooltip-pad">USB-C</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Power</span><span class="tooltip-value">5V</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Data</span><span class="tooltip-value">HID / MIDI / MSC</span></div>
+          </div>
+        </div>
+
+        <!-- BOOT -->
+        <div class="hotspot hotspot-rect tooltip-below tooltip-right" style="left: 84%; top: 48%; width: 10%; height: 8%;">
+          <div class="tooltip">
+            <div class="tooltip-header"><span class="tooltip-pad">BOOT</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Function</span><span class="tooltip-value">Reset device</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Tip</span><span class="tooltip-value">Don't touch pads during white swipe</span></div>
+          </div>
+        </div>
+
+        <!-- D1 -->
+        <div class="hotspot hotspot-rect tooltip-below tooltip-right" style="left: 87%; top: 69%; width: 7%; height: 6%;">
+          <div class="tooltip">
+            <div class="tooltip-header"><span class="tooltip-pad">D1 (Status)</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Normal</span><span class="tooltip-value">White heartbeat</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Boot</span><span class="tooltip-value">Mode colors</span></div>
+          </div>
+        </div>
+
+        <!-- QR -->
+        <div class="hotspot hotspot-rect tooltip-below" style="left: 58%; top: 65%; width: 14%; height: 24%;">
+          <div class="tooltip">
+            <div class="tooltip-header"><span class="tooltip-pad">hack me!</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">QR</span><span class="tooltip-value">Links to docs</span></div>
+          </div>
+        </div>
+
+        <!-- midi? -->
+        <div class="hotspot hotspot-rect tooltip-below tooltip-right" style="left: 77%; top: 60%; width: 8%; height: 6%;">
+          <div class="tooltip">
+            <div class="tooltip-header"><span class="tooltip-pad">midi?</span><span class="tooltip-led">GPIO 20</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Closed</span><span class="tooltip-value">MIDI mode</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Open</span><span class="tooltip-value">HID mode</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="side-panel">
+      
+      <div class="card">
+        <h2 class="card-title">boot_combos (hold ~1 sec)</h2>
+        
+        <div class="combo-row combo-config">
+          <div class="combo-pads">
+            <div class="combo-pad">1</div>
+            <span class="combo-plus">+</span>
+            <div class="combo-pad">2</div>
+          </div>
+          <div class="combo-info">
+            <div class="combo-name">CONFIG</div>
+            <div class="combo-desc">USB drive for config.txt</div>
+          </div>
+          <div class="combo-colors">
+            <div class="color-dot" style="background: var(--blue)"></div>
+            <span>→</span>
+            <div class="color-dot blink" style="background: var(--green)"></div>
+          </div>
+        </div>
+
+        <div class="combo-row combo-reset">
+          <div class="combo-pads">
+            <div class="combo-pad">3</div>
+            <span class="combo-plus">+</span>
+            <div class="combo-pad">4</div>
+          </div>
+          <div class="combo-info">
+            <div class="combo-name">RESET</div>
+            <div class="combo-desc">Factory reset settings</div>
+          </div>
+          <div class="combo-colors">
+            <div class="color-dot" style="background: var(--red)"></div>
+            <span>→</span>
+            <div class="color-dot blink" style="background: var(--white)"></div>
+          </div>
+        </div>
+
+        <div class="combo-row combo-midi">
+          <div class="combo-pads">
+            <div class="combo-pad">7</div>
+            <span class="combo-plus">+</span>
+            <div class="combo-pad">8</div>
+          </div>
+          <div class="combo-info">
+            <div class="combo-name">FORCE MIDI</div>
+            <div class="combo-desc">MIDI regardless of jumper</div>
+          </div>
+          <div class="combo-colors">
+            <div class="color-dot" style="background: var(--yellow)"></div>
+            <span>→</span>
+            <div class="color-dot blink" style="background: var(--red)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">config_syntax</h2>
+        <div class="syntax-pattern">pad_<span style="color: var(--yellow)">X</span>_<span style="color: var(--blue)">param</span>=<span style="color: var(--green)">value</span></div>
+        <a href="config-reference-v1.3.html" class="syntax-link">View Full Reference →</a>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">quick_fixes</h2>
+        <div class="tip-item">
+          <span class="tip-icon">!</span>
+          <span>Not registering? <strong>Ground yourself</strong> on PCB edge</span>
+        </div>
+        <div class="tip-item">
+          <span class="tip-icon">!</span>
+          <span>Dry hands? <strong>Moisten fingertips</strong></span>
+        </div>
+        <div class="tip-item">
+          <span class="tip-icon">!</span>
+          <span>Acting weird? Press <strong>BOOT</strong>, don't touch during white swipe</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <img src="logo.png" alt="dubpixel" class="footer-logo">
+    <div class="footer-tagline">making strange things daily</div>
+    <div class="footer-version">v1.3</div>
+  </footer>
+
+</body>
+</html>

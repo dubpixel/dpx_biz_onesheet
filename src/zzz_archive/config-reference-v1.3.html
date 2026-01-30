@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dpx_biz Config Reference v1.3</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #1a1a1a;
+      --gold: #c9a227;
+      --blue: #4a9eff;
+      --green: #4aff7a;
+      --red: #ff4a4a;
+      --yellow: #ffdd4a;
+      --white: #ffffff;
+      --text: #e0e0e0;
+      --text-dim: #888888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover { opacity: 0.7; }
+
+    .header { margin-bottom: 40px; }
+
+    .header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .header .subtitle { color: var(--text-dim); font-size: 0.9rem; }
+
+    .section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid #333;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .syntax-box {
+      background: #0d0d0d;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+
+    .syntax-box .yellow { color: var(--yellow); }
+    .syntax-box .blue { color: var(--blue); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      text-align: left;
+      color: var(--text-dim);
+      font-weight: 500;
+      padding: 10px 12px;
+      border-bottom: 1px solid #444;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #222;
+      vertical-align: top;
+    }
+
+    td code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold);
+      background: rgba(201, 162, 39, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .value-range {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--blue);
+      font-size: 0.8rem;
+    }
+
+    .keys-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .key-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 10px;
+      border-radius: 4px;
+      color: var(--text);
+      border: 1px solid #333;
+    }
+
+    .modifier-chip {
+      background: rgba(74, 158, 255, 0.1);
+      border-color: rgba(74, 158, 255, 0.3);
+      color: var(--blue);
+    }
+
+    .example-block {
+      background: #0d0d0d;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .example-block .comment { color: var(--text-dim); }
+    .example-block .key { color: var(--blue); }
+    .example-block .value { color: var(--green); }
+
+    .note {
+      background: rgba(201, 162, 39, 0.1);
+      border-left: 3px solid var(--gold);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      margin-top: 16px;
+    }
+
+    .note strong { color: var(--gold); }
+
+    .defaults-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .pad-default {
+      background: #0d0d0d;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+    }
+
+    .pad-default-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .pad-default-pad {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .pad-default-led {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+    }
+
+    .pad-default-led.has-led { color: var(--green); }
+    .pad-default-led.no-led { color: var(--red); }
+
+    .pad-default-config {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #333;
+    }
+
+    .pad-default-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 4px 0;
+    }
+
+    .pad-default-label { color: var(--text-dim); }
+
+    .pad-default-value { font-family: 'JetBrains Mono', monospace; }
+    .pad-default-value.hid { color: var(--blue); }
+    .pad-default-value.midi { color: var(--green); }
+    .pad-default-value.func { color: var(--yellow); font-size: 0.75rem; }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #222;
+    }
+
+    .footer-logo { height: 32px; width: auto; }
+    .footer-tagline { font-size: 0.7rem; color: var(--text-dim); margin-top: 6px; }
+    .footer-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="dpx-interactive-v1.3.html" class="back-link">← Back to Interactive Map</a>
+
+    <header class="header">
+      <h1>config_reference</h1>
+      <p class="subtitle">full parameter documentation for config.txt</p>
+    </header>
+
+    <!-- Pattern -->
+    <div class="section">
+      <h2 class="section-title">parameter_pattern</h2>
+      <div class="syntax-box">pad_<span class="yellow">X</span>_<span class="blue">parameter</span>=<span class="green">value</span></div>
+      <p style="color: var(--text-dim); font-size: 0.85rem;">
+        Where <strong style="color: var(--yellow)">X</strong> = config index (0-11). See Factory Defaults below for PCB label → config key mapping.
+      </p>
+    </div>
+
+    <!-- Parameters Table -->
+    <div class="section">
+      <h2 class="section-title">parameters</h2>
+      <table>
+        <thead>
+          <tr><th>Parameter</th><th>Values</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>midi_note</code></td><td><span class="value-range">0-127</span></td><td>MIDI note number (60 = middle C)</td></tr>
+          <tr><td><code>midi_velocity</code></td><td><span class="value-range">1-127</span></td><td>Note velocity (loudness)</td></tr>
+          <tr><td><code>midi_channel</code></td><td><span class="value-range">1-16</span></td><td>MIDI channel</td></tr>
+          <tr><td><code>hid_key</code></td><td><span class="value-range">see below</span></td><td>Key or key combo (e.g., <code>ctrl+alt+s</code>)</td></tr>
+          <tr><td><code>led_brightness</code></td><td><span class="value-range">0-255</span></td><td>Overall LED brightness</td></tr>
+          <tr><td><code>led_base_r</code></td><td><span class="value-range">0-255</span></td><td>Base color red component</td></tr>
+          <tr><td><code>led_base_g</code></td><td><span class="value-range">0-255</span></td><td>Base color green component</td></tr>
+          <tr><td><code>led_base_b</code></td><td><span class="value-range">0-255</span></td><td>Base color blue component</td></tr>
+          <tr><td><code>led_touch_hue_shift</code></td><td><span class="value-range">-127 to +127</span></td><td>Hue shift when touched</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modifiers -->
+    <div class="section">
+      <h2 class="section-title">modifiers</h2>
+      <div class="keys-grid">
+        <span class="key-chip modifier-chip">ctrl</span>
+        <span class="key-chip modifier-chip">alt</span>
+        <span class="key-chip modifier-chip">shift</span>
+        <span class="key-chip modifier-chip">gui</span>
+      </div>
+      <div class="note">
+        <strong>Combine with +</strong> — e.g., <code>ctrl+alt+arrow_up</code> or <code>shift+f5</code><br>
+        Maximum 2 modifiers currently supported.
+      </div>
+    </div>
+
+    <!-- Special Keys -->
+    <div class="section">
+      <h2 class="section-title">special_keys</h2>
+      
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Navigation</p>
+      <div class="keys-grid" style="margin-bottom: 16px;">
+        <span class="key-chip">arrow_up</span>
+        <span class="key-chip">arrow_down</span>
+        <span class="key-chip">arrow_left</span>
+        <span class="key-chip">arrow_right</span>
+        <span class="key-chip">home</span>
+        <span class="key-chip">end</span>
+        <span class="key-chip">page_up</span>
+        <span class="key-chip">page_down</span>
+      </div>
+
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Function Keys</p>
+      <div class="keys-grid" style="margin-bottom: 16px;">
+        <span class="key-chip">f1</span><span class="key-chip">f2</span><span class="key-chip">f3</span>
+        <span class="key-chip">f4</span><span class="key-chip">f5</span><span class="key-chip">f6</span>
+        <span class="key-chip">f7</span><span class="key-chip">f8</span><span class="key-chip">f9</span>
+        <span class="key-chip">f10</span><span class="key-chip">f11</span><span class="key-chip">f12</span>
+      </div>
+
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Common</p>
+      <div class="keys-grid" style="margin-bottom: 16px;">
+        <span class="key-chip">tab</span>
+        <span class="key-chip">enter</span>
+        <span class="key-chip">esc</span>
+        <span class="key-chip">space</span>
+        <span class="key-chip">backspace</span>
+        <span class="key-chip">delete</span>
+      </div>
+
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Punctuation</p>
+      <div class="keys-grid">
+        <span class="key-chip">comma</span>
+        <span class="key-chip">period</span>
+        <span class="key-chip">minus</span>
+        <span class="key-chip">equal</span>
+        <span class="key-chip">[</span>
+        <span class="key-chip">]</span>
+        <span class="key-chip">\</span>
+        <span class="key-chip">;</span>
+        <span class="key-chip">'</span>
+        <span class="key-chip">`</span>
+        <span class="key-chip">/</span>
+      </div>
+    </div>
+
+    <!-- Example Config -->
+    <div class="section">
+      <h2 class="section-title">example_config</h2>
+      <div class="example-block"><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PAD 0 (x.1 on PCB) - "Layer Up" for d3 designer</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="key">pad_0_hid_key</span>=<span class="value">ctrl+alt+arrow_up</span>
+<span class="key">pad_0_midi_note</span>=<span class="value">60</span>
+<span class="key">pad_0_midi_velocity</span>=<span class="value">127</span>
+<span class="key">pad_0_midi_channel</span>=<span class="value">1</span>
+<span class="key">pad_0_led_brightness</span>=<span class="value">30</span>
+<span class="key">pad_0_led_base_r</span>=<span class="value">0</span>
+<span class="key">pad_0_led_base_g</span>=<span class="value">0</span>
+<span class="key">pad_0_led_base_b</span>=<span class="value">0</span>
+<span class="key">pad_0_led_touch_hue_shift</span>=<span class="value">40</span>
+
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PAD 5 (x.6 on PCB) - "Next Section" - Red base color</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="key">pad_5_hid_key</span>=<span class="value">period</span>
+<span class="key">pad_5_led_base_r</span>=<span class="value">255</span>
+<span class="key">pad_5_led_base_g</span>=<span class="value">0</span>
+<span class="key">pad_5_led_base_b</span>=<span class="value">0</span>
+
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PAD 8 (x.9 on PCB) - "Play Section" / Space bar</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="key">pad_8_hid_key</span>=<span class="value">space</span></div>
+    </div>
+
+    <!-- Default Values -->
+    <div class="section">
+      <h2 class="section-title">factory_defaults</h2>
+      <div class="defaults-grid">
+        
+        <!-- x.1 = pad_0 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.1</span>
+            <span class="pad-default-led has-led">LED 0</span>
+          </div>
+          <div class="pad-default-config">pad_0_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">ctrl+alt+↑</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 60</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">3</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Layer Up</span></div>
+        </div>
+
+        <!-- x.2 = pad_1 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.2</span>
+            <span class="pad-default-led has-led">LED 1</span>
+          </div>
+          <div class="pad-default-config">pad_1_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">alt+s</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 61</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">2</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Split Section</span></div>
+        </div>
+
+        <!-- x.3 = pad_2 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.3</span>
+            <span class="pad-default-led has-led">LED 2</span>
+          </div>
+          <div class="pad-default-config">pad_2_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">alt+m</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 62</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">1</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Merge Section</span></div>
+        </div>
+
+        <!-- x.4 = pad_3 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.4</span>
+            <span class="pad-default-led has-led">LED 3</span>
+          </div>
+          <div class="pad-default-config">pad_3_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">ctrl+alt+[</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 64</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">4</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Trim Container</span></div>
+        </div>
+
+        <!-- x.5 = pad_4 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.5</span>
+            <span class="pad-default-led has-led">LED 4</span>
+          </div>
+          <div class="pad-default-config">pad_4_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">o</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 65</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">9</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">End of Container</span></div>
+        </div>
+
+        <!-- x.6 = pad_5 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.6</span>
+            <span class="pad-default-led has-led">LED 9</span>
+          </div>
+          <div class="pad-default-config">pad_5_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">period (.)</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 66</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">7</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Next Section</span></div>
+        </div>
+
+        <!-- x.7 = pad_6 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.7</span>
+            <span class="pad-default-led has-led">LED 8</span>
+          </div>
+          <div class="pad-default-config">pad_6_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">comma (,)</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 67</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">6</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Previous Section</span></div>
+        </div>
+
+        <!-- x.8 = pad_7 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.8</span>
+            <span class="pad-default-led has-led">LED 7</span>
+          </div>
+          <div class="pad-default-config">pad_7_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">alt+t</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 69</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">5</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Repeat Prev Tag</span></div>
+        </div>
+
+        <!-- x.9 = pad_8 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.9</span>
+            <span class="pad-default-led has-led">LED 6</span>
+          </div>
+          <div class="pad-default-config">pad_8_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">space</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 70</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">10</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Play Section</span></div>
+        </div>
+
+        <!-- x.10 = pad_9 -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.10</span>
+            <span class="pad-default-led has-led">LED 5</span>
+          </div>
+          <div class="pad-default-config">pad_9_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">ctrl+alt+↓</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 69</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">11</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Func</span><span class="pad-default-value func">Layer Down</span></div>
+        </div>
+
+        <!-- x.11 = pad_10 (QR area) -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.11</span>
+            <span class="pad-default-led no-led">No LED</span>
+          </div>
+          <div class="pad-default-config">pad_10_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">esc</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 70</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">18</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Note</span><span class="pad-default-value" style="color: var(--text-dim);">Near QR code</span></div>
+        </div>
+
+        <!-- x.12 = pad_11 (logo area) -->
+        <div class="pad-default">
+          <div class="pad-default-header">
+            <span class="pad-default-pad">Pad x.12</span>
+            <span class="pad-default-led no-led">No LED</span>
+          </div>
+          <div class="pad-default-config">pad_11_*</div>
+          <div class="pad-default-row"><span class="pad-default-label">HID</span><span class="pad-default-value hid">tab</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">MIDI</span><span class="pad-default-value midi">Note 48</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">GPIO</span><span class="pad-default-value">19</span></div>
+          <div class="pad-default-row"><span class="pad-default-label">Note</span><span class="pad-default-value" style="color: var(--text-dim);">Near logo</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="footer">
+      <img src="logo.png" alt="dubpixel" class="footer-logo">
+      <div class="footer-tagline">making strange things daily</div>
+      <div class="footer-version">v1.3</div>
+    </footer>
+  </div>
+</body>
+</html>

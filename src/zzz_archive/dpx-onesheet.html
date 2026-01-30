@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DPX Business Card - Quick Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #1a1a1a;
+      --bg-pcb: #2d2418;
+      --gold: #c9a227;
+      --gold-dim: #8b7355;
+      --pad-fill: #3d3d3d;
+      --pad-stroke: #c9a227;
+      --blue: #4a9eff;
+      --green: #4aff7a;
+      --red: #ff4a4a;
+      --yellow: #ffdd4a;
+      --white: #ffffff;
+      --text: #e0e0e0;
+      --text-dim: #888888;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--gold), #e8d48b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-top: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #333;
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    /* PCB Diagram */
+    .pcb-container {
+      background: var(--bg-pcb);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--gold-dim);
+    }
+
+    .pcb-photo {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Boot Combos */
+    .boot-combos {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .combo-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      border-left: 4px solid;
+    }
+
+    .combo-config { border-left-color: var(--blue); }
+    .combo-reset { border-left-color: var(--red); }
+    .combo-midi { border-left-color: var(--yellow); }
+
+    .combo-pads {
+      display: flex;
+      gap: 6px;
+    }
+
+    .combo-pad {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 14px;
+      background: var(--pad-fill);
+      border: 2px solid;
+    }
+
+    .combo-config .combo-pad { border-color: var(--blue); color: var(--blue); }
+    .combo-reset .combo-pad { border-color: var(--red); color: var(--red); }
+    .combo-midi .combo-pad { border-color: var(--yellow); color: var(--yellow); }
+
+    .combo-plus {
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    .combo-info {
+      flex: 1;
+    }
+
+    .combo-name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .combo-config .combo-name { color: var(--blue); }
+    .combo-reset .combo-name { color: var(--red); }
+    .combo-midi .combo-name { color: var(--yellow); }
+
+    .combo-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .combo-colors {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .color-dot.blink {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.3; }
+    }
+
+    /* Config Syntax */
+    .syntax-section {
+      margin-bottom: 20px;
+    }
+
+    .syntax-title {
+      font-size: 0.8rem;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .syntax-pattern {
+      background: #0d0d0d;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+
+    .syntax-table {
+      width: 100%;
+      font-size: 0.75rem;
+    }
+
+    .syntax-table th {
+      text-align: left;
+      color: var(--text-dim);
+      font-weight: 500;
+      padding: 6px 8px;
+      border-bottom: 1px solid #333;
+    }
+
+    .syntax-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #222;
+    }
+
+    .syntax-table code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold);
+      background: rgba(201, 162, 39, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .example-block {
+      background: #0d0d0d;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+
+    .example-block .comment { color: var(--text-dim); }
+    .example-block .key { color: var(--blue); }
+    .example-block .value { color: var(--green); }
+
+    /* Troubleshooting */
+    .troubleshoot-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #222;
+    }
+
+    .troubleshoot-item:last-child {
+      border-bottom: none;
+    }
+
+    .troubleshoot-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .troubleshoot-content {
+      flex: 1;
+    }
+
+    .troubleshoot-problem {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .troubleshoot-solution {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .troubleshoot-solution strong {
+      color: var(--green);
+    }
+
+    /* Buttons Section */
+    .buttons-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .button-info {
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      padding: 16px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .button-visual {
+      width: 50px;
+      height: 24px;
+      background: #2a2a2a;
+      border: 2px solid var(--gold-dim);
+      border-radius: 4px;
+      margin: 0 auto 12px;
+    }
+
+    .button-info h4 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .button-info p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* LED Legend */
+    .led-legend {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .led-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+    }
+
+    .led-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+
+    .footer-brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--gold);
+      letter-spacing: 4px;
+    }
+
+    .footer-tip {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 8px;
+    }
+
+    /* Special Keys Grid */
+    .keys-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .key-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: rgba(255,255,255,0.05);
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>DPX Quick Reference</h1>
+      <p class="subtitle">Capacitive Touch Business Card</p>
+    </header>
+
+    <div class="grid">
+      <!-- Left Column: PCB Diagram + Boot Combos -->
+      <div style="display: flex; flex-direction: column; gap: 30px;">
+        
+        <!-- PCB Diagram Card -->
+        <div class="card">
+          <h2 class="card-title">Pad Layout</h2>
+          <div class="pcb-container">
+            <img src="pcb-photo.png" alt="DPX PCB Business Card" class="pcb-photo">
+          </div>
+        </div>
+
+        <!-- Boot Combos Card -->
+        <div class="card">
+          <h2 class="card-title">Boot Combos (hold ~1 sec during boot)</h2>
+          <div class="boot-combos">
+            
+            <div class="combo-row combo-config">
+              <div class="combo-pads">
+                <div class="combo-pad">1</div>
+                <span class="combo-plus">+</span>
+                <div class="combo-pad">2</div>
+              </div>
+              <div class="combo-info">
+                <div class="combo-name">CONFIG MODE</div>
+                <div class="combo-desc">USB drive for config.txt editing</div>
+              </div>
+              <div class="combo-colors">
+                <div class="color-dot" style="background: var(--blue)"></div>
+                <span>→</span>
+                <div class="color-dot blink" style="background: var(--green)"></div>
+              </div>
+            </div>
+
+            <div class="combo-row combo-reset">
+              <div class="combo-pads">
+                <div class="combo-pad">3</div>
+                <span class="combo-plus">+</span>
+                <div class="combo-pad">4</div>
+              </div>
+              <div class="combo-info">
+                <div class="combo-name">RESET CONFIG</div>
+                <div class="combo-desc">Factory reset all settings</div>
+              </div>
+              <div class="combo-colors">
+                <div class="color-dot" style="background: var(--red)"></div>
+                <span>→</span>
+                <div class="color-dot blink" style="background: var(--white)"></div>
+              </div>
+            </div>
+
+            <div class="combo-row combo-midi">
+              <div class="combo-pads">
+                <div class="combo-pad">7</div>
+                <span class="combo-plus">+</span>
+                <div class="combo-pad">8</div>
+              </div>
+              <div class="combo-info">
+                <div class="combo-name">FORCE MIDI</div>
+                <div class="combo-desc">MIDI mode regardless of jumper</div>
+              </div>
+              <div class="combo-colors">
+                <div class="color-dot" style="background: var(--yellow)"></div>
+                <span>→</span>
+                <div class="color-dot blink" style="background: var(--red)"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Config Syntax + Troubleshooting -->
+      <div style="display: flex; flex-direction: column; gap: 30px;">
+        
+        <!-- Buttons Card -->
+        <div class="card">
+          <h2 class="card-title">Buttons</h2>
+          <div class="buttons-row">
+            <div class="button-info">
+              <div class="button-visual"></div>
+              <h4>BOOT</h4>
+              <p>Press to reset/reboot</p>
+            </div>
+            <div class="button-info">
+              <div class="button-visual"></div>
+              <h4>RESET</h4>
+              <p>Hold during power-up → bootloader</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Config Syntax Card -->
+        <div class="card">
+          <h2 class="card-title">Config Syntax</h2>
+          
+          <div class="syntax-section">
+            <div class="syntax-pattern">pad_<span style="color: var(--yellow)">X</span>_<span style="color: var(--blue)">parameter</span>=<span style="color: var(--green)">value</span></div>
+            
+            <table class="syntax-table">
+              <tr>
+                <th>Parameter</th>
+                <th>Values</th>
+              </tr>
+              <tr>
+                <td><code>midi_note</code></td>
+                <td>0-127</td>
+              </tr>
+              <tr>
+                <td><code>midi_velocity</code></td>
+                <td>1-127</td>
+              </tr>
+              <tr>
+                <td><code>midi_channel</code></td>
+                <td>1-16</td>
+              </tr>
+              <tr>
+                <td><code>hid_key</code></td>
+                <td>key or combo</td>
+              </tr>
+              <tr>
+                <td><code>led_brightness</code></td>
+                <td>0-255</td>
+              </tr>
+              <tr>
+                <td><code>led_base_r/g/b</code></td>
+                <td>0-255</td>
+              </tr>
+              <tr>
+                <td><code>led_touch_hue_shift</code></td>
+                <td>-127 to +127</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="syntax-section">
+            <div class="syntax-title">Modifiers</div>
+            <div class="keys-grid">
+              <span class="key-chip">ctrl</span>
+              <span class="key-chip">alt</span>
+              <span class="key-chip">shift</span>
+              <span class="key-chip">gui</span>
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-top: 8px;">Combine with +: <code style="color: var(--gold);">ctrl+alt+arrow_up</code> (max 2)</p>
+          </div>
+
+          <div class="syntax-section">
+            <div class="syntax-title">Special Keys</div>
+            <div class="keys-grid">
+              <span class="key-chip">tab</span>
+              <span class="key-chip">enter</span>
+              <span class="key-chip">esc</span>
+              <span class="key-chip">space</span>
+              <span class="key-chip">backspace</span>
+              <span class="key-chip">delete</span>
+              <span class="key-chip">f1-f12</span>
+              <span class="key-chip">arrow_↑↓←→</span>
+              <span class="key-chip">home</span>
+              <span class="key-chip">end</span>
+              <span class="key-chip">page_up/down</span>
+            </div>
+          </div>
+
+          <div class="syntax-section">
+            <div class="syntax-title">Example</div>
+            <div class="example-block">
+              <div><span class="key">pad_0_hid_key</span>=<span class="value">ctrl+alt+arrow_up</span></div>
+              <div><span class="key">pad_5_led_base_r</span>=<span class="value">255</span></div>
+              <div><span class="key">pad_5_led_base_g</span>=<span class="value">0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Troubleshooting Card -->
+        <div class="card">
+          <h2 class="card-title">Troubleshooting</h2>
+          
+          <div class="troubleshoot-item">
+            <div class="troubleshoot-icon">!</div>
+            <div class="troubleshoot-content">
+              <div class="troubleshoot-problem">Touches not registering?</div>
+              <div class="troubleshoot-solution"><strong>Rest other hand on PCB edge</strong> for grounding</div>
+            </div>
+          </div>
+
+          <div class="troubleshoot-item">
+            <div class="troubleshoot-icon">!</div>
+            <div class="troubleshoot-content">
+              <div class="troubleshoot-problem">Dry hands?</div>
+              <div class="troubleshoot-solution"><strong>Moisten fingertips</strong> slightly</div>
+            </div>
+          </div>
+
+          <div class="troubleshoot-item">
+            <div class="troubleshoot-icon">!</div>
+            <div class="troubleshoot-content">
+              <div class="troubleshoot-problem">Pads acting weird/inverted?</div>
+              <div class="troubleshoot-solution">Press <strong>BOOT</strong> to reset, don't touch during WHITE swipe</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-brand">DPX</div>
+      <p class="footer-tip">💡 Status LED (D1) shows white heartbeat when running • Pads 10 & 11 have no LEDs</p>
+    </footer>
+  </div>
+</body>
+</html>

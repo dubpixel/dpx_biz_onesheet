@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dpx_biz interactive reference v1.9</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #1a1a1a;
+      --gold: #c9a227;
+      --blue: #4a9eff;
+      --green: #4aff7a;
+      --red: #ff4a4a;
+      --yellow: #ffdd4a;
+      --white: #ffffff;
+      --text: #e0e0e0;
+      --text-dim: #888888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header { text-align: center; margin-bottom: 20px; }
+
+    .header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* PCB Image Section - Full width on top */
+    .pcb-section {
+      margin-bottom: 24px;
+    }
+
+    .pcb-map {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 12px;
+      border: 2px solid #333;
+      overflow: hidden;
+    }
+
+    .pcb-map img { 
+      width: 100%; 
+      height: auto; 
+      display: block;
+    }
+
+    /* SVG Overlay - scales perfectly with image */
+    .hotspot-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .hotspot-overlay .hotspot {
+      pointer-events: auto;
+      cursor: pointer;
+      fill: transparent;
+      stroke: transparent;
+      stroke-width: 3;
+      transition: all 0.15s ease;
+    }
+
+    .hotspot-overlay .hotspot:hover {
+      stroke: var(--gold);
+      fill: rgba(201, 162, 39, 0.15);
+      filter: drop-shadow(0 0 10px rgba(201, 162, 39, 0.5));
+    }
+
+    /* Tooltip */
+    .tooltip-container {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .tooltip {
+      background: rgba(10, 10, 10, 0.97);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 12px 16px;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+
+    .tooltip.visible { opacity: 1; visibility: visible; }
+
+    .tooltip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .tooltip-pad {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--gold);
+    }
+
+    .tooltip-led {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--green);
+    }
+
+    .tooltip-config {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #333;
+    }
+
+    .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin: 5px 0;
+      gap: 20px;
+    }
+
+    .tooltip-label { color: var(--text-dim); }
+    .tooltip-value { font-family: 'JetBrains Mono', monospace; color: var(--white); }
+    .tooltip-value.hid { color: var(--blue); }
+    .tooltip-value.midi { color: var(--green); }
+    .tooltip-value.func { color: var(--yellow); font-size: 0.75rem; }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #333;
+    }
+
+    .card.wide {
+      grid-column: span 2;
+    }
+
+    .card-title {
+      font-size: 0.7rem;
+      text-transform: lowercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    /* Hardware section */
+    .hw-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .hw-item:last-child { margin-bottom: 0; }
+
+    .hw-icon-wrap {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .hw-svg {
+      width: 22px;
+      height: 22px;
+      color: var(--text-dim);
+    }
+
+    .hw-item:hover .hw-svg { color: var(--gold); }
+    .led-icon .hw-svg { color: var(--white); }
+
+    .led-glow {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--white);
+      border-radius: 50%;
+      top: 8px;
+      left: 11px;
+      animation: ledPulse 2s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--white), 0 0 12px var(--white);
+    }
+
+    @keyframes ledPulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .hw-info { flex: 1; }
+    .hw-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.95rem; color: var(--gold); }
+    .hw-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+    .hw-desc { font-size: 0.7rem; color: var(--text); margin-top: 2px; }
+
+    /* Boot Sequence */
+    .sequence-visual {
+      background: #0d0d0d;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .swipe-animation {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .swipe-led {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #333;
+      animation: swipe 2.5s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.15s);
+    }
+
+    @keyframes swipe {
+      0%, 20% { background: #333; box-shadow: none; }
+      25%, 35% { background: #fff; box-shadow: 0 0 8px #fff; }
+      40%, 100% { background: #333; box-shadow: none; }
+    }
+
+    .swipe-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .sequence-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .seq-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+
+    .seq-step.highlight {
+      background: rgba(74, 255, 122, 0.1);
+      border: 1px solid rgba(74, 255, 122, 0.3);
+    }
+
+    .seq-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    .seq-step.highlight .seq-num { background: var(--green); color: #000; }
+    .seq-text { color: var(--text); }
+    .seq-text strong { color: var(--white); }
+    .seq-step.highlight .seq-text strong { color: var(--green); }
+
+    /* Quick fixes */
+    .tip-item {
+      display: flex;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid #222;
+      font-size: 0.7rem;
+    }
+
+    .tip-item:last-child { border-bottom: none; }
+    .tip-icon { color: var(--red); font-weight: bold; }
+    .tip-item strong { color: var(--green); }
+
+    /* Boot combos */
+    .combo-grid { display: flex; flex-direction: column; gap: 8px; }
+
+    .combo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      border-left: 3px solid;
+    }
+
+    .combo-config { border-left-color: var(--blue); }
+    .combo-reset { border-left-color: var(--red); }
+    .combo-midi { border-left-color: var(--yellow); }
+
+    .combo-pads { display: flex; gap: 4px; align-items: center; }
+
+    .combo-pad {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 10px;
+      background: #2a2a2a;
+      border: 2px solid;
+    }
+
+    .combo-config .combo-pad { border-color: var(--blue); color: var(--blue); }
+    .combo-reset .combo-pad { border-color: var(--red); color: var(--red); }
+    .combo-midi .combo-pad { border-color: var(--yellow); color: var(--yellow); }
+
+    .combo-plus { font-size: 10px; color: var(--text-dim); }
+    .combo-info { flex: 1; }
+    .combo-name { font-weight: 600; font-size: 0.8rem; }
+
+    .combo-config .combo-name { color: var(--blue); }
+    .combo-reset .combo-name { color: var(--red); }
+    .combo-midi .combo-name { color: var(--yellow); }
+
+    .combo-desc { font-size: 0.65rem; color: var(--text-dim); margin-top: 2px; }
+
+    .combo-colors {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      font-size: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+    }
+
+    .color-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .color-dot.blink { animation: blink 0.8s infinite; }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0.2; }
+    }
+
+    /* Config syntax */
+    .syntax-pattern {
+      background: #0d0d0d;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .syntax-link {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      background: rgba(201, 162, 39, 0.1);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .syntax-link:hover { background: rgba(201, 162, 39, 0.2); }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #222;
+    }
+
+    .footer-logo { height: 36px; width: auto; }
+    .footer-tagline { font-size: 0.7rem; color: var(--text-dim); margin-top: 6px; }
+    .footer-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>dpx_biz</h1>
+    <p class="subtitle">hover over pads to learn more</p>
+  </header>
+
+  <div class="main-container">
+    
+    <!-- PCB Image Section -->
+    <div class="pcb-section">
+      <div class="pcb-map" id="pcbMap">
+        <img src="pcb-photo.png" alt="dpx_biz PCB">
+        
+        <!-- SVG Overlay - viewBox matches image dimensions exactly -->
+        <svg class="hotspot-overlay" viewBox="0 0 1152 808" preserveAspectRatio="xMidYMid meet">
+          <!-- x.1 = pad_0 (arrow shape approximated as rect) -->
+          <rect class="hotspot" data-pad="0" x="17" y="17" width="128" height="253" rx="8"/>
+          <!-- x.2 = pad_1 -->
+          <circle class="hotspot" data-pad="1" cx="248" cy="108" r="75"/>
+          <!-- x.3 = pad_2 -->
+          <circle class="hotspot" data-pad="2" cx="400" cy="95" r="78"/>
+          <!-- x.4 = pad_3 -->
+          <circle class="hotspot" data-pad="3" cx="545" cy="115" r="60"/>
+          <!-- x.5 = pad_4 -->
+          <circle class="hotspot" data-pad="4" cx="640" cy="280" r="53"/>
+          <!-- x.6 = pad_5 -->
+          <circle class="hotspot" data-pad="5" cx="110" cy="405" r="93"/>
+          <!-- x.7 = pad_6 -->
+          <circle class="hotspot" data-pad="6" cx="295" cy="290" r="93"/>
+          <!-- x.8 = pad_7 -->
+          <circle class="hotspot" data-pad="7" cx="460" cy="340" r="80"/>
+          <!-- x.9 = pad_8 -->
+          <circle class="hotspot" data-pad="8" cx="400" cy="565" r="103"/>
+          <!-- x.10 = pad_9 -->
+          <circle class="hotspot" data-pad="9" cx="635" cy="405" r="48"/>
+        </svg>
+
+        <!-- Tooltip container -->
+        <div class="tooltip-container" id="tooltipContainer">
+          <div class="tooltip" id="tooltip"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+      
+      <!-- Hardware -->
+      <div class="card">
+        <h2 class="card-title">hardware</h2>
+        <div class="hw-item">
+          <div class="hw-icon-wrap">
+            <svg class="hw-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="6" y="4" rx="2" width="12" height="16"/>
+              <circle cx="12" cy="12" r="3"/>
+              <line x1="12" y1="17" x2="12" y2="20"/>
+            </svg>
+          </div>
+          <div class="hw-info">
+            <div class="hw-name">boot.</div>
+            <div class="hw-meta">SW1 — reboot</div>
+            <div class="hw-desc">push to reboot the device</div>
+          </div>
+        </div>
+        <div class="hw-item">
+          <div class="hw-icon-wrap">
+            <svg class="hw-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="6" y="4" rx="2" width="12" height="16"/>
+              <circle cx="12" cy="12" r="3"/>
+              <line x1="12" y1="17" x2="12" y2="20"/>
+            </svg>
+          </div>
+          <div class="hw-info">
+            <div class="hw-name">reset.</div>
+            <div class="hw-meta">SW2 — bootloader</div>
+            <div class="hw-desc">hold during reboot</div>
+          </div>
+        </div>
+        <div class="hw-item">
+          <div class="hw-icon-wrap led-icon">
+            <svg class="hw-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18h6"/>
+              <path d="M10 22h4"/>
+              <path d="M12 2v1"/>
+              <path d="M12 5a5 5 0 0 1 5 5c0 2.76-2.5 5-5 5s-5-2.24-5-5a5 5 0 0 1 5-5z"/>
+              <path d="M9 18v-3"/>
+              <path d="M15 18v-3"/>
+            </svg>
+            <div class="led-glow"></div>
+          </div>
+          <div class="hw-info">
+            <div class="hw-name">d1.</div>
+            <div class="hw-meta">status LED</div>
+            <div class="hw-desc">white heartbeat = running</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Boot Sequence -->
+      <div class="card">
+        <h2 class="card-title">boot_sequence</h2>
+        
+        <div class="sequence-visual">
+          <div class="swipe-animation">
+            <div class="swipe-led" style="--i:0"></div>
+            <div class="swipe-led" style="--i:1"></div>
+            <div class="swipe-led" style="--i:2"></div>
+            <div class="swipe-led" style="--i:3"></div>
+            <div class="swipe-led" style="--i:4"></div>
+            <div class="swipe-led" style="--i:5"></div>
+            <div class="swipe-led" style="--i:6"></div>
+            <div class="swipe-led" style="--i:7"></div>
+            <div class="swipe-led" style="--i:8"></div>
+            <div class="swipe-led" style="--i:9"></div>
+          </div>
+          <div class="swipe-label">white swipe</div>
+        </div>
+
+        <div class="sequence-steps">
+          <div class="seq-step"><span class="seq-num">1</span><span class="seq-text">white swipe</span></div>
+          <div class="seq-step"><span class="seq-num">2</span><span class="seq-text">3× D1 chirps</span></div>
+          <div class="seq-step highlight"><span class="seq-num">3</span><span class="seq-text"><strong>HOLD PADS</strong></span></div>
+          <div class="seq-step"><span class="seq-num">4</span><span class="seq-text">detection color</span></div>
+          <div class="seq-step"><span class="seq-num">5</span><span class="seq-text">confirm blink</span></div>
+          <div class="seq-step"><span class="seq-num">6</span><span class="seq-text">heartbeat = ready</span></div>
+        </div>
+      </div>
+
+      <!-- Quick Fixes -->
+      <div class="card">
+        <h2 class="card-title">quick_fixes</h2>
+        <div class="tip-item">
+          <span class="tip-icon">!</span>
+          <span>not registering? <strong>ground yourself</strong> on PCB edge</span>
+        </div>
+        <div class="tip-item">
+          <span class="tip-icon">!</span>
+          <span>dry hands? <strong>moisten fingertips</strong></span>
+        </div>
+        <div class="tip-item">
+          <span class="tip-icon">!</span>
+          <span>acting weird? press <strong>boot.</strong> don't touch during white swipe</span>
+        </div>
+      </div>
+
+      <!-- Config Syntax -->
+      <div class="card">
+        <h2 class="card-title">config_syntax</h2>
+        <div class="syntax-pattern">pad_<span style="color: var(--yellow)">X</span>_<span style="color: var(--blue)">param</span>=<span style="color: var(--green)">value</span></div>
+        <a href="config-reference-v1.9.html" class="syntax-link">view full reference →</a>
+      </div>
+
+      <!-- Boot Combos - spans 2 columns -->
+      <div class="card wide">
+        <h2 class="card-title">boot_combos</h2>
+        <div class="combo-grid">
+          <div class="combo-row combo-config">
+            <div class="combo-pads">
+              <div class="combo-pad">1</div>
+              <span class="combo-plus">+</span>
+              <div class="combo-pad">2</div>
+            </div>
+            <div class="combo-info">
+              <div class="combo-name">CONFIG</div>
+              <div class="combo-desc">USB drive for config.txt</div>
+            </div>
+            <div class="combo-colors">
+              <div class="color-dot" style="background: var(--blue)"></div>
+              <span>→</span>
+              <div class="color-dot blink" style="background: var(--green)"></div>
+            </div>
+          </div>
+
+          <div class="combo-row combo-reset">
+            <div class="combo-pads">
+              <div class="combo-pad">3</div>
+              <span class="combo-plus">+</span>
+              <div class="combo-pad">4</div>
+            </div>
+            <div class="combo-info">
+              <div class="combo-name">RESET</div>
+              <div class="combo-desc">factory reset settings</div>
+            </div>
+            <div class="combo-colors">
+              <div class="color-dot" style="background: var(--red)"></div>
+              <span>→</span>
+              <div class="color-dot blink" style="background: var(--white)"></div>
+            </div>
+          </div>
+
+          <div class="combo-row combo-midi">
+            <div class="combo-pads">
+              <div class="combo-pad">7</div>
+              <span class="combo-plus">+</span>
+              <div class="combo-pad">8</div>
+            </div>
+            <div class="combo-info">
+              <div class="combo-name">FORCE MIDI</div>
+              <div class="combo-desc">MIDI regardless of jumper</div>
+            </div>
+            <div class="combo-colors">
+              <div class="color-dot" style="background: var(--yellow)"></div>
+              <span>→</span>
+              <div class="color-dot blink" style="background: var(--red)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <img src="logo.png" alt="dubpixel" class="footer-logo">
+    <div class="footer-tagline">making strange things daily</div>
+    <div class="footer-version">v1.9</div>
+  </footer>
+
+  <script>
+    // Pad data for tooltips
+    const padData = {
+      0: { label: 'x.1', config: 'pad_0_*', led: 'LED 0', hid: 'ctrl+alt+↑', midi: 'note 60', gpio: '3', func: 'layer up' },
+      1: { label: 'x.2', config: 'pad_1_*', led: 'LED 1', hid: 'alt+s', midi: 'note 61', gpio: '2', func: 'split section' },
+      2: { label: 'x.3', config: 'pad_2_*', led: 'LED 2', hid: 'alt+m', midi: 'note 62', gpio: '1', func: 'merge section' },
+      3: { label: 'x.4', config: 'pad_3_*', led: 'LED 3', hid: 'ctrl+alt+[', midi: 'note 64', gpio: '4', func: 'trim container' },
+      4: { label: 'x.5', config: 'pad_4_*', led: 'LED 4', hid: 'o', midi: 'note 65', gpio: '9', func: 'end of container' },
+      5: { label: 'x.6', config: 'pad_5_*', led: 'LED 9', hid: 'period (.)', midi: 'note 66', gpio: '7', func: 'next section' },
+      6: { label: 'x.7', config: 'pad_6_*', led: 'LED 8', hid: 'comma (,)', midi: 'note 67', gpio: '6', func: 'previous section' },
+      7: { label: 'x.8', config: 'pad_7_*', led: 'LED 7', hid: 'alt+t', midi: 'note 69', gpio: '5', func: 'repeat prev tag' },
+      8: { label: 'x.9', config: 'pad_8_*', led: 'LED 6', hid: 'space', midi: 'note 70', gpio: '10', func: 'play section' },
+      9: { label: 'x.10', config: 'pad_9_*', led: 'LED 5', hid: 'ctrl+alt+↓', midi: 'note 69', gpio: '11', func: 'layer down' }
+    };
+
+    const pcbMap = document.getElementById('pcbMap');
+    const tooltipContainer = document.getElementById('tooltipContainer');
+    const tooltip = document.getElementById('tooltip');
+    const hotspots = document.querySelectorAll('.hotspot');
+
+    hotspots.forEach(hotspot => {
+      hotspot.addEventListener('mouseenter', (e) => {
+        const padIndex = hotspot.dataset.pad;
+        const data = padData[padIndex];
+        
+        tooltip.innerHTML = `
+          <div class="tooltip-header">
+            <span class="tooltip-pad">pad ${data.label}</span>
+            <span class="tooltip-led">${data.led}</span>
+          </div>
+          <div class="tooltip-config">${data.config}</div>
+          <div class="tooltip-row"><span class="tooltip-label">HID</span><span class="tooltip-value hid">${data.hid}</span></div>
+          <div class="tooltip-row"><span class="tooltip-label">MIDI</span><span class="tooltip-value midi">${data.midi}</span></div>
+          <div class="tooltip-row"><span class="tooltip-label">GPIO</span><span class="tooltip-value">${data.gpio}</span></div>
+          <div class="tooltip-row"><span class="tooltip-label">func</span><span class="tooltip-value func">${data.func}</span></div>
+        `;
+
+        tooltip.classList.add('visible');
+      });
+
+      hotspot.addEventListener('mousemove', (e) => {
+        const rect = pcbMap.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        tooltipContainer.style.left = x + 'px';
+        tooltipContainer.style.top = (y - 10) + 'px';
+      });
+
+      hotspot.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('visible');
+      });
+    });
+  </script>
+
+</body>
+</html>
