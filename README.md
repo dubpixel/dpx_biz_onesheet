@@ -56,7 +56,7 @@
    <br />
 <!-- TABLE OF CONTENTS -->
 <!-- ABOUT THE PROJECT -->
-<details>
+
 <summary><h3>About The Project</h3></summary>
 
 this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB business card. it's a standalone html page that lets you hover over each touch pad to see what it does—boot combos, HID mappings, MIDI notes, LED colors, and more.
@@ -75,11 +75,11 @@ the dpx_biz is a business card that actually does something—it's a USB HID dev
 *author(s): // www.dubpixel.tv  - i@dubpixel.tv* 
 </br>
 <h3>Images</h3>
-
+<details>
 ### FRONT
 ![FRONT][product-front]
 </details>
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 ### Built With 
  
@@ -117,7 +117,6 @@ the dpx_biz is a business card that actually does something—it's a USB HID dev
   2. open `src/dpx-interactive.html` in your browser
   3. hover over the pads to explore
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
