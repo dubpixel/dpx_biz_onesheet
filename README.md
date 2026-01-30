@@ -42,7 +42,7 @@
 <h1 align="center">dpx_biz_onesheet</h1>
 <h3 align="center"><i>"..oh, you want a manual?.."</i></h3>
   <p align="center">
-    one sheet instrucitons for the best buisness card ever
+    interactive quick-reference for the dpx_biz capacitive touch PCB business card
     <br />
      »  
      <a href="https://github.com/dubpixel/dpx_biz_onesheet"><strong>Project Here!</strong></a>
@@ -83,10 +83,21 @@
 <!-- ABOUT THE PROJECT -->
 <details>
 <summary><h3>About The Project</h3></summary>
-a lengthy description about the project that should probably be many lines. this is where you can get deep about shit and be like oh man its the best hot dog in the universe because i use the koskusko mustart!
+
+this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB business card. it's a standalone html page that lets you hover over each touch pad to see what it does—boot combos, HID mappings, MIDI notes, LED colors, and more.
+
+**key features:**
+- **interactive pcb map** – hover over any of the 10 touch pads to see its function
+- **soft glowing halos** – visual feedback on hover with smooth fade in/out
+- **smart tooltips** – auto-position to avoid clipping at edges
+- **config reference** – full config.txt syntax documentation included
+- **works offline** – just open the html file in any browser, no server needed
+
+the dpx_biz is a business card that actually does something—it's a USB HID device that can send keystrokes, mouse clicks, or MIDI notes. this onesheet helps new users figure out what each pad does without reading a full manual.
+
 </br>
 
-*author(s): // www.dubpixel.tv  - i@dubpixel.tv | other authors* 
+*author(s): // www.dubpixel.tv  - i@dubpixel.tv* 
 </br>
 <h3>Images</h3>
 
@@ -97,7 +108,9 @@ a lengthy description about the project that should probably be many lines. this
 
 ### Built With 
  
- * 
+ * vanilla html/css/javascript
+ * no frameworks, no dependencies, no build step
+ * just open and go
 
 <!--
  * [![KiCad][KiCad.org]][KiCad-url]
@@ -120,33 +133,69 @@ a lengthy description about the project that should probably be many lines. this
 ## Getting Started
 
   ### Prerequisites
-  * 
+  * any modern web browser (chrome, firefox, safari, edge)
+  * that's it—no server, no install, no node_modules
+  
   ### Installation
 
-  1. 
+  1. clone or download this repo
+  2. open `src/dpx-interactive.html` in your browser
+  3. hover over the pads to explore
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-1. <!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+### using the interactive reference
 
-_For more examples, please refer to the [Documentation](https://example.com)_-->
+1. open `src/dpx-interactive.html` in your browser
+2. hover over any touch pad to see its mapping
+3. tooltips show: pad number, HID key, MIDI note, LED color
+
+### boot modes (hold during plug-in)
+
+| combo | mode | what it does |
+|-------|------|--------------|
+| **pad 1 + 2** | config mode | mounts as USB drive to edit config.txt |
+| **pad 3 + 4** | factory reset | clears config, restores defaults |
+| **pad 7 + 8** | force MIDI | boots in MIDI mode regardless of config |
+
+### touch tips
+
+- **single tap** – sends the mapped key/note once
+- **hold** – some pads support hold behavior (configurable)
+- **pad 1** is top-left, **pad 10** is bottom-right
+- LED colors indicate pad state (configurable per-pad)
+
+### config.txt reference
+
+for full config syntax, open `src/config-reference.html`—it covers all parameters like `sensitivity`, `led_color`, `midi_channel`, and more.
+
+_see the interactive page for the complete pad→key→midi mapping table_
 <!-- REFLECTION -->
 ## Reflection
 
 * what did we learn? 
-  - _x_
+  - _hover effects are surprisingly finicky at image boundaries_
+  - _percentage-based positioning > pixel-based for responsive layouts_
 * what do we like/hate?
-  - _y_
+  - _like: soft glowing halos look pro_
+  - _hate: tooltip positioning edge cases are endless_
 * what would/could we do differently?
-  - _z_
+  - _maybe use svg overlays instead of div hotspots_
+  - _consider a dark mode toggle_
   <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-    - [ ] Nested Feature
+- [x] interactive pcb map with hover tooltips
+- [x] soft glowing halos on hover
+- [x] smart tooltip positioning (no clipping)
+- [x] config.txt reference page
+- [ ] dark mode toggle
+- [ ] mobile/touch-friendly version
+- [ ] embed short video demo
+- [ ] integrate with github pages for live hosting
 
 See the [open issues](https://github.com/dubpixel/dpx_biz_onesheet/issues) for a full list of proposed features (and known issues).
 

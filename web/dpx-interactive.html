@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dpx_biz interactive reference v2.0.2</title>
+  <title>dpx_biz interactive reference v2.0.7</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -80,6 +80,7 @@
       left: 0;
       width: 100%;
       height: 100%;
+      overflow: visible;
       /* No transform - positions are pre-scaled in HTML */
     }
 
@@ -92,9 +93,10 @@
       height: 8.7%;
       border-radius: 50%;
       background: transparent;
+      overflow: visible;
     }
 
-    /* The glow halo - 2x larger than trigger area, hidden by default */
+    /* The glow halo - big version for most pads */
     .hotspot::before {
       content: '';
       position: absolute;
@@ -107,13 +109,21 @@
       background: radial-gradient(circle, rgba(201, 162, 39, 0.8) 0%, rgba(201, 162, 39, 0.4) 35%, rgba(201, 162, 39, 0) 70%);
       box-shadow: 0 0 35px rgba(201, 162, 39, 0.6), 0 0 60px rgba(201, 162, 39, 0.25);
       opacity: 0;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transition: opacity 0.5s ease;
       pointer-events: none;
     }
 
+    /* Smaller halo for edge pads (1 and 10) to avoid clipping */
+    .hotspot.edge-halo::before {
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.9) 0%, rgba(201, 162, 39, 0.5) 40%, rgba(201, 162, 39, 0) 70%);
+      box-shadow: 0 0 25px rgba(201, 162, 39, 0.6);
+    }
+
     @keyframes haloPulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.85; }
-      50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
     }
 
     .hotspot:hover::before {
@@ -633,7 +643,7 @@
       <div class="card">
         <h2 class="card-title">config_syntax</h2>
         <div class="syntax-pattern">pad_<span style="color: var(--yellow)">X</span>_<span style="color: var(--blue)">param</span>=<span style="color: var(--green)">value</span></div>
-        <a href="config-reference-v1.9.html" class="syntax-link">view full reference →</a>
+        <a href="config-reference.html" class="syntax-link">view full reference →</a>
       </div>
 
       <!-- Boot Combos - spans 2 columns -->
@@ -699,7 +709,7 @@
   <footer class="footer">
     <img src="images/logo.png" alt="dubpixel" class="footer-logo">
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v2.0.2</div>
+    <div class="footer-version">v2.0.7</div>
   </footer>
 
   <script>
@@ -769,6 +779,12 @@
           
         const hotspot = document.createElement('div');
         hotspot.className = 'hotspot';
+        
+        // Edge pads get smaller halo to avoid clipping
+        if (pad === '1' || pad === '10') {
+          hotspot.classList.add('edge-halo');
+        }
+        
         hotspot.style.left = leftPct + '%';
         hotspot.style.top = topPct + '%';
         
