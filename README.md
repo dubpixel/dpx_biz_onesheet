@@ -191,8 +191,17 @@ Don't forget to give the project a star! Thanks again!
 
 <!-- LICENSE -->
 ## License
+This work is licensed under CC BY-SA 4.0 with the following additional restriction: __commercial sale of unmodified reproductions is prohibited.__ Modified versions that constitute a substantial remix may be sold under the same terms.
 
-  Distributed under the UNLICENSE License. See `LICENSE.txt` for more information.
+__In plain terms:__
+
+* Use it, learn from it, build on it — go buck wild!!
+* Give credit back to this project
+* _Don't_ just clone this and sell it— __that's not allowed__
+* Remixes, improvements, and real derivatives? Sell them, just keep the attribution and share-alike
+* Share your modifications under these same terms
+
+_Questions about commercial use? Open an issue or reach out._
 <!-- CONTACT -->
 ## Contact
 
