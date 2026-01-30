@@ -57,7 +57,9 @@
    <br />
 <!-- TABLE OF CONTENTS -->
 <!-- ABOUT THE PROJECT -->
-<h3>About The Project</h3>
+
+
+## About The Project
 this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB business card. it's a standalone html page that lets you hover over each touch pad to see what it does—boot combos, HID mappings, MIDI notes, LED colors, and more.
 
 **key features:**
@@ -67,18 +69,16 @@ this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB
 - **config reference** – full config.txt syntax documentation included
 - **works offline** – just open the html file in any browser, no server needed
 
-the dpx_biz is a business card that actually does something—it's a USB HID device that can send keystrokes, mouse clicks, or MIDI notes. this onesheet helps new users figure out what each pad does without reading a full manual.
+_the dpx_biz is a business card that actually does something—it's a USB HID device that can send keystrokes, mouse clicks, or MIDI notes. this onesheet helps new users figure out what each pad does without reading a full manual._
 <details>
 <summary>Images</summary>
 
-
-  
   ### FRONT
   ![FRONT][product-front]
 
 </details>
 
-### Built With 
+## Built With 
 
  * vanilla html/css/javascript
  * no frameworks, no dependencies, no build step
@@ -106,9 +106,10 @@ the dpx_biz is a business card that actually does something—it's a USB HID dev
 
   ### Prerequisites
   * any modern web browser (chrome, firefox, safari, edge)
-  * that's it—no server, no install, no node_modules
+  * a dpx_biz card (contact i@dubpixel.tv for details)
+  * usb-c cable
   
-  ### Installation
+### Installation
 
   1. clone or download this repo
   2. open `src/dpx-interactive.html` in your browser
@@ -124,6 +125,9 @@ the dpx_biz is a business card that actually does something—it's a USB HID dev
 2. hover over any touch pad to see its mapping
 3. tooltips show: pad number, HID key, MIDI note, LED color
 
+<details>
+<summary>More Usage Information</summary>
+  
 ### boot modes (hold during plug-in)
 
 | combo | mode | what it does |
@@ -144,14 +148,17 @@ the dpx_biz is a business card that actually does something—it's a USB HID dev
 for full config syntax, open `src/config-reference.html`—it covers all parameters like `sensitivity`, `led_color`, `midi_channel`, and more.
 
 _see the interactive page for the complete pad→key→midi mapping table_
+
+</details>
 <!-- REFLECTION -->
+
 ## Reflection
 
 * what did we learn? 
   - _hover effects are surprisingly finicky at image boundaries_
   - _percentage-based positioning > pixel-based for responsive layouts_
 * what do we like/hate?
-  - _like: soft glowing halos look pro_
+  - _like: soft glowing halos are fun_
   - _hate: tooltip positioning edge cases are endless_
 * what would/could we do differently?
   - _maybe use svg overlays instead of div hotspots_
@@ -163,10 +170,8 @@ _see the interactive page for the complete pad→key→midi mapping table_
 - [x] soft glowing halos on hover
 - [x] smart tooltip positioning (no clipping)
 - [x] config.txt reference page
-- [ ] dark mode toggle
-- [ ] mobile/touch-friendly version
-- [ ] embed short video demo
-- [ ] integrate with github pages for live hosting
+- [ ] correct popup bounds for narrow portait clipping
+- [ ] insert URL into readme
 
 See the [open issues](https://github.com/dubpixel/dpx_biz_onesheet/issues) for a full list of proposed features (and known issues).
 
@@ -178,16 +183,16 @@ _Contributions are what make the open source community such an amazing place to 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+  1. Fork the Project
+  2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+  3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+  4. Push to the Branch (`git push origin feature/AmazingFeature`)
+  5. Open a Pull Request
 
 ### Top contributors:
-<a href="https://github.com/dubpixel/dpx_biz_onesheet/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=dubpixel/dpx_biz_onesheet" alt="contrib.rocks image" />
-</a>
+  <a href="https://github.com/dubpixel/dpx_biz_onesheet/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=dubpixel/dpx_biz_onesheet" alt="contrib.rocks image" />
+  </a>
 
 <!-- LICENSE -->
 ## License
@@ -215,7 +220,6 @@ _Questions about commercial use? Open an issue or reach out._
 <!--
   * [ ]() - the best !
 -->
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
