@@ -73,8 +73,9 @@ this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB
 - **works offline** – just open the html file in any browser, no server needed
 
 _the dpx_biz is a business card that actually does something—it's a USB HID device that can send keystrokes, mouse clicks, or MIDI notes. this onesheet helps new users figure out what each pad does without reading a full manual._
+
 <details>
-<summary>Images</summary>
+<summary>Images </summary>
 
   ### FRONT
   ![FRONT][product-front]
@@ -106,7 +107,6 @@ _the dpx_biz is a business card that actually does something—it's a USB HID de
 <!-- GETTING STARTED -->
 
 ## Getting Started
-
   ### Prerequisites
   * any modern web browser (chrome, firefox, safari, edge)
   * a dpx_biz card (contact i@dubpixel.tv for details)
@@ -129,7 +129,7 @@ _the dpx_biz is a business card that actually does something—it's a USB HID de
 3. tooltips show: pad number, HID key, MIDI note, LED color
 
 <details>
-<summary>More Usage Information</summary>
+<summary>More Usage Information </summary>
   
 ### boot modes (hold during plug-in)
 
