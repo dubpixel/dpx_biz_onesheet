@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dpx_biz interactive reference v2.0.9</title>
+  <title>dpx_biz interactive reference v2.1.1</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -54,6 +54,58 @@
       margin-bottom: 24px;
       padding: 30px;
       overflow: visible;
+    }
+
+    /* Image Toggle Switch */
+    .pcb-toggle-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .toggle-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      transition: color 0.3s ease;
+    }
+
+    .toggle-label.active {
+      color: var(--gold);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 24px;
+      background: #333;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      border: 1px solid #444;
+    }
+
+    .toggle-switch:hover {
+      border-color: var(--gold);
+    }
+
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: var(--gold);
+      border-radius: 50%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 8px rgba(201, 162, 39, 0.5);
+    }
+
+    .toggle-switch.toggled::before {
+      transform: translateX(24px);
     }
 
     .pcb-map {
@@ -562,8 +614,16 @@
     
     <!-- PCB Image Section -->
     <div class="pcb-section">
+      <!-- Image Toggle -->
+      <div class="pcb-toggle-wrap">
+        <span class="toggle-label" id="labelJlc">jlc render</span>
+        <div class="toggle-switch" id="pcbToggle" title="switch pcb image"></div>
+        <span class="toggle-label active" id="labelPhoto">photo</span>
+      </div>
       <div class="pcb-map">
-        <img src="images/pcb-photo.png" alt="dpx_biz PCB">
+        <img id="pcbImage" src="images/pcb-photo.png" alt="dpx_biz PCB">
+        <!-- Preload alternate image -->
+        <img src="images/pcb-photo_jlc.png" alt="" style="display:none">
         
         <!-- Hotspots loaded from hotspots.tsv via JavaScript -->
         <div class="hotspots-container" id="hotspotsContainer">
@@ -763,9 +823,11 @@
       </a>
     </div>
     <!-- ================================================== -->
-    <img src="images/logo.png" alt="dubpixel" class="footer-logo">
+    <a href="https://portfolio.dubpixel.tv" target="_blank" title="dubpixel.tv">
+      <img src="images/logo.png" alt="dubpixel" class="footer-logo">
+    </a>
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v2.0.8</div>
+    <div class="footer-version">v2.1.1</div>
   </footer>
 
   <script>
@@ -859,6 +921,20 @@
         `;
         
         container.appendChild(hotspot);
+      });
+
+      // PCB Image Toggle
+      const toggle = document.getElementById('pcbToggle');
+      const pcbImage = document.getElementById('pcbImage');
+      const labelPhoto = document.getElementById('labelPhoto');
+      const labelJlc = document.getElementById('labelJlc');
+
+      toggle.addEventListener('click', () => {
+        toggle.classList.toggle('toggled');
+        const isJlc = toggle.classList.contains('toggled');
+        pcbImage.src = isJlc ? 'images/pcb-photo_jlc.png' : 'images/pcb-photo.png';
+        labelPhoto.classList.toggle('active', !isJlc);
+        labelJlc.classList.toggle('active', isJlc);
       });
     });
   </script>
