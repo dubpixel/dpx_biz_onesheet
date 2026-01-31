@@ -220,7 +220,7 @@ _Questions about commercial use? Open an issue or reach out._
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-
+ * Michael Kohler  - @mkohler99 - thank you for the brilliant idea to make my onesheet an interactive web page. You consistently inspire and challenge me to keep creating!
 <!--
   * [ ]() - the best !
 -->
