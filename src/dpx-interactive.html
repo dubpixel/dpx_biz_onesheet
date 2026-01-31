@@ -556,6 +556,44 @@
 
     .syntax-link:hover { background: rgba(201, 162, 39, 0.2); }
 
+    /* Tool buttons */
+    .tool-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tool-button {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      background: rgba(74, 158, 255, 0.1);
+      border: 1px solid var(--blue);
+      border-radius: 6px;
+      color: var(--blue);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .tool-button:hover {
+      background: rgba(74, 158, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
+    }
+
+    .tool-button.synth {
+      background: rgba(201, 162, 39, 0.1);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .tool-button.synth:hover {
+      background: rgba(201, 162, 39, 0.2);
+      box-shadow: 0 4px 12px rgba(201, 162, 39, 0.2);
+    }
+
     .footer {
       text-align: center;
       margin-top: 30px;
@@ -805,6 +843,15 @@
               <div class="color-dot blink" style="background: var(--red)"></div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="card">
+        <h2 class="card-title">tools</h2>
+        <div class="tool-buttons">
+          <a href="dpx_biz_synth.html" class="tool-button synth">🎹 web synth</a>
+          <a href="dpx_biz_keyboard.html" class="tool-button">⌨️ keyboard tester</a>
         </div>
       </div>
 

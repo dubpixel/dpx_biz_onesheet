@@ -14,6 +14,16 @@ cp "$SRC_DIR/dpx-interactive.html" "$WEB_DIR/index.html"
 echo "Copying config-reference.html → web/config-reference.html"
 cp "$SRC_DIR/config-reference.html" "$WEB_DIR/config-reference.html"
 
+# Copy dpx_biz_synth.html
+echo "Copying dpx_biz_synth.html → web/dpx_biz_synth.html"
+cp "$SRC_DIR/dpx_biz_synth.html" "$WEB_DIR/dpx_biz_synth.html"
+
+# Copy dpx_biz_keyboard.html if it exists
+if [ -f "$SRC_DIR/dpx_biz_keyboard.html" ]; then
+  echo "Copying dpx_biz_keyboard.html → web/dpx_biz_keyboard.html"
+  cp "$SRC_DIR/dpx_biz_keyboard.html" "$WEB_DIR/dpx_biz_keyboard.html"
+fi
+
 # Copy hotspots.json only if changed
 if [ -f "$WEB_DIR/hotspots.json" ]; then
   if cmp -s "$SRC_DIR/hotspots.json" "$WEB_DIR/hotspots.json"; then
