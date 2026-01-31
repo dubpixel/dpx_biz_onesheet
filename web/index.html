@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dpx_biz interactive reference v2.1.8</title>
+  <title>dpx_biz interactive reference v2.2.0</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -144,8 +144,9 @@
       width: 5%;
       height: 8.7%;
       border-radius: 50%;
-      background: transparent;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.2) 0%, rgba(201, 162, 39, 0.1) 70%, transparent 100%);
       overflow: visible;
+      box-shadow: inset 0 0 8px rgba(201, 162, 39, 0.15);
     }
 
     /* The glow halo - big version for most pads */
@@ -158,19 +159,20 @@
       height: 200%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(201, 162, 39, 0.8) 0%, rgba(201, 162, 39, 0.4) 35%, rgba(201, 162, 39, 0) 70%);
-      box-shadow: 0 0 35px rgba(201, 162, 39, 0.6), 0 0 60px rgba(201, 162, 39, 0.25);
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.8) 0%, rgba(201, 162, 39, 0.4) 35%, rgba(201, 162, 39, 0.15) 60%, rgba(201, 162, 39, 0) 100%);
       opacity: 0;
       transition: opacity 0.5s ease;
       pointer-events: none;
     }
 
-    /* Smaller halo for edge pads (1 and 10) to avoid clipping */
+    /* Smaller halo for edge pads (1, 10, SW2, d1) to avoid clipping */
     .hotspot.edge-halo::before {
-      width: 150%;
-      height: 150%;
-      background: radial-gradient(circle, rgba(201, 162, 39, 0.9) 0%, rgba(201, 162, 39, 0.5) 40%, rgba(201, 162, 39, 0) 70%);
-      box-shadow: 0 0 25px rgba(201, 162, 39, 0.6);
+      top: 50% !important;
+      left: 50% !important;
+      width: 150% !important;
+      height: 150% !important;
+      transform: translate(-50%, -50%) !important;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.7) 0%, rgba(201, 162, 39, 0.35) 35%, rgba(201, 162, 39, 0.1) 60%, rgba(201, 162, 39, 0) 100%);
     }
 
     @keyframes haloPulse {
@@ -199,7 +201,8 @@
       transition: opacity 0.75s ease, transform 0.75s ease, visibility 0.75s;
       z-index: 1000;
       pointer-events: none;
-      white-space: nowrap;
+      word-wrap: break-word;
+      white-space: normal;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(201, 162, 39, 0.15);
       /* Default: below the hotspot */
       top: calc(100% + 10px);
@@ -835,7 +838,7 @@
       <img src="images/logo.png" alt="dubpixel" class="footer-logo">
     </a>
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v2.1.8</div>
+    <div class="footer-version">v2.2.0</div>
   </footer>
 
   <script>
@@ -853,11 +856,11 @@
       10: { label: 'x.10', config: 'pad_9_*', led: 'LED 5', hid: 'ctrl+alt+↓', midi: 'note 69', gpio: '11', func: 'layer down',      ttClass: 'tt-right' },
       'SW1': { label: 'SW1', config: 'n/a', led: 'n/a', hid: 'reboot', midi: 'n/a', gpio: 'n/a', func: 'push to reboot', ttClass: 'tt-right' },
       'SW2': { label: 'SW2', config: 'n/a', led: 'n/a', hid: 'bootloader', midi: 'n/a', gpio: 'n/a', func: 'hold during reboot', ttClass: 'tt-left' },
-      'd1': { label: 'd1', config: 'n/a', led: 'status', hid: 'n/a', midi: 'n/a', gpio: 'n/a', func: '3× chirps = boot, heartbeat = ready', ttClass: 'tt-right' }
+      'd1': { label: 'd1', config: 'n/a', led: 'status', hid: 'n/a', midi: 'n/a', gpio: 'n/a', func: '3× chirps = boot,\nheartbeat = ready', ttClass: 'tt-right' }
     };
 
-    // Hotspot coordinates from hotspots.tsv (embedded for local file:// support)
-    // To update: edit these values to match hotspots.tsv
+    // Hotspot coordinates from hotspots.json (embedded for local file:// support)
+    // To update: edit these values to match hotspots.json
     const hotspotCoords = {
       1:  { x: 95,  y: 208 },
       2:  { x: 272, y: 110 },
@@ -868,7 +871,10 @@
       7:  { x: 370, y: 316 },
       8:  { x: 579, y: 411 },
       9:  { x: 699, y: 565 },
-      10: { x: 901, y: 535 }
+      10: { x: 901, y: 535 },
+      'SW1': { x: 1100, y: 438 },
+      'SW2': { x: 855, y: 27 },
+      'd1':  { x: 1100, y: 538 }
     };
 
     // Image dimensions for percentage conversion
@@ -921,8 +927,8 @@
         const hotspot = document.createElement('div');
         hotspot.className = 'hotspot';
         
-        // Edge pads get smaller halo to avoid clipping
-        if (pad === '1' || pad === '10') {
+        // Edge pads get smaller halo to avoid clipping (pads at image edges)
+        if (pad === '1' || pad === '10' || pad === 'SW2' || pad === 'd1') {
           hotspot.classList.add('edge-halo');
         }
         
