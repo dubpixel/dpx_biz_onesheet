@@ -37,4 +37,11 @@ else
   cp "$SRC_DIR/hotspots.json" "$WEB_DIR/hotspots.json"
 fi
 
+# Copy samples folder if it exists
+if [ -d "$SRC_DIR/samples" ]; then
+  echo "Copying samples folder → web/samples/"
+  mkdir -p "$WEB_DIR/samples"
+  cp -r "$SRC_DIR/samples/"* "$WEB_DIR/samples/"
+fi
+
 echo "✓ Deploy complete"
