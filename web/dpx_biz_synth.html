@@ -517,6 +517,10 @@
           </button>
           <button class="mode-btn" data-mode="7">
             <span class="mode-num">7</span>
+            <span class="mode-label">cello</span>
+          </button>
+          <button class="mode-btn" data-mode="8">
+            <span class="mode-num">8</span>
             <span class="mode-label">custom</span>
           </button>
         </div>
@@ -639,13 +643,14 @@
       10: { x: 76.6, y: 79.1 }
     };
 
-    // Sample paths for modes 2-6
+    // Sample paths for modes 2-7
     const SAMPLE_PATHS = {
       2: 'samples/cat.wav',
       3: 'samples/dog.wav',
       4: 'samples/sheeyit.wav',
       5: 'samples/awgeez.wav',
-      6: 'samples/horn.wav'
+      6: 'samples/horn.wav',
+      7: 'samples/cello.wav'
     };
 
     // Keyboard mapping
@@ -773,7 +778,7 @@
       
       // Get buffer for current mode
       let buffer;
-      if (currentMode === 7) {
+      if (currentMode === 8) {
         buffer = customSampleBuffer;
       } else {
         buffer = sampleBuffers[currentMode];
@@ -940,7 +945,7 @@
       
       oscControls.classList.toggle('visible', currentMode === 1);
       samplerControls.classList.toggle('visible', currentMode > 1);
-      dropZone.classList.toggle('visible', currentMode === 7);
+      dropZone.classList.toggle('visible', currentMode === 8);
     }
 
     function setupKnobs() {
