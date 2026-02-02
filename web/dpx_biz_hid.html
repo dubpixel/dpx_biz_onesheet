@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dpx_biz_hid v1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #1a1a1a;
+      --gold: #c9a227;
+      --blue: #4a9eff;
+      --green: #4aff7a;
+      --red: #ff4a4a;
+      --yellow: #ffdd4a;
+      --white: #ffffff;
+      --text: #e0e0e0;
+      --text-dim: #888888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header { text-align: center; margin-bottom: 20px; }
+
+    .header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* PCB Section */
+    .pcb-section {
+      margin-bottom: 24px;
+      padding: 30px;
+      overflow: visible;
+    }
+
+    .pcb-map {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 12px;
+      border: 2px solid #333;
+      overflow: visible;
+    }
+
+    .pcb-map img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .hotspots-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Hotspots */
+    .hotspot {
+      position: absolute;
+      width: 5%;
+      height: 8.7%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.15) 0%, rgba(201, 162, 39, 0.05) 70%, transparent 100%);
+      transition: all 0.15s ease;
+    }
+
+    .hotspot::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.8) 0%, rgba(201, 162, 39, 0.4) 35%, rgba(201, 162, 39, 0.15) 60%, rgba(201, 162, 39, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      pointer-events: none;
+    }
+
+    .hotspot.active::before {
+      opacity: 1;
+      animation: haloPulse 0.3s ease-out;
+    }
+
+    @keyframes haloPulse {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    .hotspot.edge-halo::before {
+      width: 150%;
+      height: 150%;
+    }
+
+    /* Current Input Display */
+    .current-input {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid #333;
+      max-width: 900px;
+      margin: 0 auto 24px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      min-height: 80px;
+    }
+
+    .input-combo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .combo-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      min-width: 200px;
+      text-align: center;
+      padding: 8px 16px;
+      background: rgba(201, 162, 39, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(201, 162, 39, 0.3);
+    }
+
+    .combo-display.empty {
+      color: var(--text-dim);
+      background: transparent;
+      border-color: #333;
+    }
+
+    .matched-pad {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pad-indicator {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--green);
+      padding: 8px 16px;
+      background: rgba(74, 255, 122, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(74, 255, 122, 0.3);
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .pad-indicator.empty {
+      color: var(--text-dim);
+      background: transparent;
+      border-color: #333;
+    }
+
+    /* Keyboard Section */
+    .keyboard-section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid #333;
+      max-width: 900px;
+      margin: 0 auto 24px auto;
+    }
+
+    .section-title {
+      font-size: 0.7rem;
+      text-transform: lowercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* Keyboard Layout */
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 4px;
+    }
+
+    .key {
+      height: 40px;
+      min-width: 40px;
+      padding: 0 8px;
+      border-radius: 6px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      transition: all 0.1s ease;
+      user-select: none;
+    }
+
+    .key.pressed {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #000;
+      box-shadow: 0 0 15px rgba(201, 162, 39, 0.5);
+      transform: translateY(1px);
+    }
+
+    .key.modifier-active {
+      background: rgba(201, 162, 39, 0.2);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Key sizes */
+    .key-backspace { min-width: 80px; }
+    .key-tab { min-width: 60px; }
+    .key-backslash { min-width: 60px; }
+    .key-caps { min-width: 72px; }
+    .key-enter { min-width: 88px; }
+    .key-shift-left { min-width: 92px; }
+    .key-shift-right { min-width: 112px; }
+    .key-ctrl { min-width: 52px; }
+    .key-alt { min-width: 48px; }
+    .key-meta { min-width: 48px; }
+    .key-space { min-width: 240px; }
+    .key-menu { min-width: 48px; }
+
+    /* Arrow keys */
+    .arrow-keys {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-left: 16px;
+    }
+
+    .arrow-row {
+      display: flex;
+      gap: 4px;
+    }
+
+    .key-arrow {
+      width: 40px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+
+    /* Bottom row container */
+    .bottom-row-container {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    /* Mapping Reference */
+    .mapping-section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid #333;
+      max-width: 900px;
+      margin: 0 auto 24px auto;
+    }
+
+    .mapping-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 700px) {
+      .mapping-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .mapping-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+    }
+
+    .mapping-pad {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .mapping-keys {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #222;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer > a:first-child {
+      display: block;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      margin-bottom: 16px;
+    }
+
+    .footer > a:first-child:hover {
+      text-decoration: underline;
+    }
+
+    .footer-logo { height: 36px; width: auto; }
+    .footer-tagline { font-size: 0.7rem; color: var(--text-dim); margin-top: 6px; }
+    .footer-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      margin-top: 8px;
+    }
+
+    /* Mobile warning */
+    .mobile-warning {
+      display: none;
+      background: rgba(255, 74, 74, 0.1);
+      border: 1px solid var(--red);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 24px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .mobile-warning p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--red);
+    }
+
+    @media (max-width: 768px) and (pointer: coarse) {
+      .mobile-warning { display: block; }
+      .keyboard-section { opacity: 0.5; }
+    }
+
+    /* Focus indicator */
+    .focus-hint {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .focus-hint.focused {
+      color: var(--green);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>dpx_biz_hid</h1>
+    <p class="subtitle">keystroke visualizer for hid mode</p>
+  </header>
+
+  <div class="main-container">
+
+    <!-- PCB Visualization -->
+    <div class="pcb-section">
+      <div class="pcb-map">
+        <img src="images/pcb-photo.png" alt="dpx_biz PCB">
+        <div class="hotspots-container" id="hotspotsContainer"></div>
+      </div>
+    </div>
+
+    <!-- Mobile Warning -->
+    <div class="mobile-warning">
+      <p>⚠ keyboard detection requires a physical keyboard</p>
+    </div>
+
+    <!-- Current Input Display -->
+    <div class="current-input">
+      <div class="input-combo">
+        <span class="input-label">input:</span>
+        <div class="combo-display empty" id="comboDisplay">press any key</div>
+      </div>
+      <div class="matched-pad">
+        <span class="input-label">pad:</span>
+        <div class="pad-indicator empty" id="padIndicator">—</div>
+      </div>
+    </div>
+
+    <!-- Focus Hint -->
+    <div class="focus-hint" id="focusHint">click anywhere to capture keyboard</div>
+
+    <!-- Keyboard Visualization -->
+    <div class="keyboard-section">
+      <div class="section-title">keyboard</div>
+      <div class="keyboard" id="keyboard">
+        <!-- Row 1: Number row -->
+        <div class="keyboard-row">
+          <div class="key" data-key="Backquote">`</div>
+          <div class="key" data-key="Digit1">1</div>
+          <div class="key" data-key="Digit2">2</div>
+          <div class="key" data-key="Digit3">3</div>
+          <div class="key" data-key="Digit4">4</div>
+          <div class="key" data-key="Digit5">5</div>
+          <div class="key" data-key="Digit6">6</div>
+          <div class="key" data-key="Digit7">7</div>
+          <div class="key" data-key="Digit8">8</div>
+          <div class="key" data-key="Digit9">9</div>
+          <div class="key" data-key="Digit0">0</div>
+          <div class="key" data-key="Minus">-</div>
+          <div class="key" data-key="Equal">=</div>
+          <div class="key key-backspace" data-key="Backspace">⌫</div>
+        </div>
+        <!-- Row 2: QWERTY top -->
+        <div class="keyboard-row">
+          <div class="key key-tab" data-key="Tab">Tab</div>
+          <div class="key" data-key="KeyQ">Q</div>
+          <div class="key" data-key="KeyW">W</div>
+          <div class="key" data-key="KeyE">E</div>
+          <div class="key" data-key="KeyR">R</div>
+          <div class="key" data-key="KeyT">T</div>
+          <div class="key" data-key="KeyY">Y</div>
+          <div class="key" data-key="KeyU">U</div>
+          <div class="key" data-key="KeyI">I</div>
+          <div class="key" data-key="KeyO">O</div>
+          <div class="key" data-key="KeyP">P</div>
+          <div class="key" data-key="BracketLeft">[</div>
+          <div class="key" data-key="BracketRight">]</div>
+          <div class="key key-backslash" data-key="Backslash">\</div>
+        </div>
+        <!-- Row 3: Home row -->
+        <div class="keyboard-row">
+          <div class="key key-caps" data-key="CapsLock">Caps</div>
+          <div class="key" data-key="KeyA">A</div>
+          <div class="key" data-key="KeyS">S</div>
+          <div class="key" data-key="KeyD">D</div>
+          <div class="key" data-key="KeyF">F</div>
+          <div class="key" data-key="KeyG">G</div>
+          <div class="key" data-key="KeyH">H</div>
+          <div class="key" data-key="KeyJ">J</div>
+          <div class="key" data-key="KeyK">K</div>
+          <div class="key" data-key="KeyL">L</div>
+          <div class="key" data-key="Semicolon">;</div>
+          <div class="key" data-key="Quote">'</div>
+          <div class="key key-enter" data-key="Enter">Enter</div>
+        </div>
+        <!-- Row 4: Bottom letters -->
+        <div class="keyboard-row">
+          <div class="key key-shift-left" data-key="ShiftLeft">Shift</div>
+          <div class="key" data-key="KeyZ">Z</div>
+          <div class="key" data-key="KeyX">X</div>
+          <div class="key" data-key="KeyC">C</div>
+          <div class="key" data-key="KeyV">V</div>
+          <div class="key" data-key="KeyB">B</div>
+          <div class="key" data-key="KeyN">N</div>
+          <div class="key" data-key="KeyM">M</div>
+          <div class="key" data-key="Comma">,</div>
+          <div class="key" data-key="Period">.</div>
+          <div class="key" data-key="Slash">/</div>
+          <div class="key key-shift-right" data-key="ShiftRight">Shift</div>
+        </div>
+        <!-- Row 5: Bottom modifiers + space + arrows -->
+        <div class="bottom-row-container">
+          <div class="keyboard-row">
+            <div class="key key-ctrl" data-key="ControlLeft">Ctrl</div>
+            <div class="key key-meta" data-key="MetaLeft">⌘</div>
+            <div class="key key-alt" data-key="AltLeft">Alt</div>
+            <div class="key key-space" data-key="Space">Space</div>
+            <div class="key key-alt" data-key="AltRight">Alt</div>
+            <div class="key key-meta" data-key="MetaRight">⌘</div>
+            <div class="key key-menu" data-key="ContextMenu">☰</div>
+            <div class="key key-ctrl" data-key="ControlRight">Ctrl</div>
+          </div>
+          <div class="arrow-keys">
+            <div class="arrow-row">
+              <div class="key key-arrow" data-key="ArrowUp">↑</div>
+            </div>
+            <div class="arrow-row">
+              <div class="key key-arrow" data-key="ArrowLeft">←</div>
+              <div class="key key-arrow" data-key="ArrowDown">↓</div>
+              <div class="key key-arrow" data-key="ArrowRight">→</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mapping Reference -->
+    <div class="mapping-section">
+      <div class="section-title">pad_mappings (default)</div>
+      <div class="mapping-grid">
+        <div class="mapping-item"><span class="mapping-pad">x.1</span><span class="mapping-keys">ctrl+alt+↑</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.2</span><span class="mapping-keys">alt+s</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.3</span><span class="mapping-keys">alt+m</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.4</span><span class="mapping-keys">ctrl+alt+[</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.5</span><span class="mapping-keys">o</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.6</span><span class="mapping-keys">.</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.7</span><span class="mapping-keys">,</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.8</span><span class="mapping-keys">alt+t</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.9</span><span class="mapping-keys">space</span></div>
+        <div class="mapping-item"><span class="mapping-pad">x.10</span><span class="mapping-keys">ctrl+alt+↓</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <a href="index.html">← back to dpx_biz reference</a>
+    <a href="https://www.dubpixel.tv" target="_blank" title="dubpixel.tv">
+      <img src="images/logo.png" alt="dubpixel" class="footer-logo">
+    </a>
+    <div class="footer-tagline">making strange things daily</div>
+    <div class="footer-version">hid v1.0</div>
+  </footer>
+
+  <script>
+    // ==================== CONFIG ====================
+    
+    // Hotspot positions (matching synth/main page)
+    const HOTSPOT_COORDS = {
+      1:  { x: 8.1,  y: 30.8 },
+      2:  { x: 23.1, y: 16.3 },
+      3:  { x: 43.1, y: 22.2 },
+      4:  { x: 59.8, y: 37.4 },
+      5:  { x: 69.9, y: 59.8 },
+      6:  { x: 13.4, y: 66.9 },
+      7:  { x: 31.5, y: 46.7 },
+      8:  { x: 49.2, y: 60.8 },
+      9:  { x: 59.4, y: 83.6 },
+      10: { x: 76.6, y: 79.1 }
+    };
+
+    // Pad to keystroke mappings (default dpx_biz config)
+    // Format: { modifiers: [list], key: 'code' }
+    const PAD_MAPPINGS = {
+      1:  { modifiers: ['ctrl', 'alt'], key: 'ArrowUp', display: 'ctrl+alt+↑' },
+      2:  { modifiers: ['alt'], key: 'KeyS', display: 'alt+s' },
+      3:  { modifiers: ['alt'], key: 'KeyM', display: 'alt+m' },
+      4:  { modifiers: ['ctrl', 'alt'], key: 'BracketLeft', display: 'ctrl+alt+[' },
+      5:  { modifiers: [], key: 'KeyO', display: 'o' },
+      6:  { modifiers: [], key: 'Period', display: '.' },
+      7:  { modifiers: [], key: 'Comma', display: ',' },
+      8:  { modifiers: ['alt'], key: 'KeyT', display: 'alt+t' },
+      9:  { modifiers: [], key: 'Space', display: 'space' },
+      10: { modifiers: ['ctrl', 'alt'], key: 'ArrowDown', display: 'ctrl+alt+↓' }
+    };
+
+    // ==================== STATE ====================
+    
+    const activeKeys = new Set();
+    const modifierState = {
+      ctrl: false,
+      alt: false,
+      shift: false,
+      meta: false
+    };
+
+    // ==================== DOM REFS ====================
+    
+    const comboDisplay = document.getElementById('comboDisplay');
+    const padIndicator = document.getElementById('padIndicator');
+    const focusHint = document.getElementById('focusHint');
+
+    // ==================== HOTSPOTS ====================
+    
+    function buildHotspots() {
+      const container = document.getElementById('hotspotsContainer');
+      
+      Object.entries(HOTSPOT_COORDS).forEach(([pad, coords]) => {
+        const hotspot = document.createElement('div');
+        hotspot.className = 'hotspot';
+        if (pad === '1' || pad === '10') hotspot.classList.add('edge-halo');
+        hotspot.dataset.pad = pad;
+        hotspot.style.left = (coords.x - 2.5) + '%';
+        hotspot.style.top = (coords.y - 4.35) + '%';
+        container.appendChild(hotspot);
+      });
+    }
+
+    function activatePad(padNum) {
+      const hotspot = document.querySelector(`.hotspot[data-pad="${padNum}"]`);
+      if (hotspot) {
+        hotspot.classList.add('active');
+      }
+      padIndicator.textContent = `x.${padNum}`;
+      padIndicator.classList.remove('empty');
+    }
+
+    function deactivateAllPads() {
+      document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+      padIndicator.textContent = '—';
+      padIndicator.classList.add('empty');
+    }
+
+    // ==================== KEYBOARD VISUALIZATION ====================
+    
+    function pressKey(code) {
+      const keyEl = document.querySelector(`.key[data-key="${code}"]`);
+      if (keyEl) {
+        keyEl.classList.add('pressed');
+      }
+    }
+
+    function releaseKey(code) {
+      const keyEl = document.querySelector(`.key[data-key="${code}"]`);
+      if (keyEl) {
+        keyEl.classList.remove('pressed');
+      }
+    }
+
+    function updateModifierVisuals() {
+      // Control keys
+      document.querySelectorAll('[data-key="ControlLeft"], [data-key="ControlRight"]').forEach(el => {
+        el.classList.toggle('modifier-active', modifierState.ctrl);
+      });
+      // Alt keys
+      document.querySelectorAll('[data-key="AltLeft"], [data-key="AltRight"]').forEach(el => {
+        el.classList.toggle('modifier-active', modifierState.alt);
+      });
+      // Shift keys
+      document.querySelectorAll('[data-key="ShiftLeft"], [data-key="ShiftRight"]').forEach(el => {
+        el.classList.toggle('modifier-active', modifierState.shift);
+      });
+      // Meta keys
+      document.querySelectorAll('[data-key="MetaLeft"], [data-key="MetaRight"]').forEach(el => {
+        el.classList.toggle('modifier-active', modifierState.meta);
+      });
+    }
+
+    // ==================== COMBO DETECTION ====================
+    
+    function buildComboString() {
+      const parts = [];
+      if (modifierState.ctrl) parts.push('ctrl');
+      if (modifierState.alt) parts.push('alt');
+      if (modifierState.shift) parts.push('shift');
+      if (modifierState.meta) parts.push('⌘');
+      
+      // Add non-modifier keys
+      activeKeys.forEach(code => {
+        if (!isModifierKey(code)) {
+          parts.push(getKeyLabel(code));
+        }
+      });
+      
+      return parts.join(' + ');
+    }
+
+    function getKeyLabel(code) {
+      const labels = {
+        'ArrowUp': '↑',
+        'ArrowDown': '↓',
+        'ArrowLeft': '←',
+        'ArrowRight': '→',
+        'Space': 'space',
+        'BracketLeft': '[',
+        'BracketRight': ']',
+        'Backslash': '\\',
+        'Semicolon': ';',
+        'Quote': "'",
+        'Comma': ',',
+        'Period': '.',
+        'Slash': '/',
+        'Backquote': '`',
+        'Minus': '-',
+        'Equal': '=',
+        'Backspace': '⌫',
+        'Tab': 'tab',
+        'CapsLock': 'caps',
+        'Enter': 'enter'
+      };
+      
+      if (labels[code]) return labels[code];
+      if (code.startsWith('Key')) return code.replace('Key', '').toLowerCase();
+      if (code.startsWith('Digit')) return code.replace('Digit', '');
+      return code.toLowerCase();
+    }
+
+    function isModifierKey(code) {
+      return ['ControlLeft', 'ControlRight', 'AltLeft', 'AltRight', 
+              'ShiftLeft', 'ShiftRight', 'MetaLeft', 'MetaRight'].includes(code);
+    }
+
+    function checkForPadMatch() {
+      // Build current state for comparison
+      const currentModifiers = {
+        ctrl: modifierState.ctrl,
+        alt: modifierState.alt,
+        shift: modifierState.shift,
+        meta: modifierState.meta
+      };
+      
+      // Find non-modifier key
+      let currentKey = null;
+      activeKeys.forEach(code => {
+        if (!isModifierKey(code)) {
+          currentKey = code;
+        }
+      });
+      
+      // Check against each pad mapping
+      for (const [pad, mapping] of Object.entries(PAD_MAPPINGS)) {
+        // Check if key matches
+        if (mapping.key !== currentKey) continue;
+        
+        // Check modifiers
+        const needsCtrl = mapping.modifiers.includes('ctrl');
+        const needsAlt = mapping.modifiers.includes('alt');
+        const needsShift = mapping.modifiers.includes('shift');
+        const needsMeta = mapping.modifiers.includes('meta');
+        
+        if (currentModifiers.ctrl === needsCtrl &&
+            currentModifiers.alt === needsAlt &&
+            currentModifiers.shift === needsShift &&
+            currentModifiers.meta === needsMeta) {
+          return parseInt(pad);
+        }
+      }
+      
+      return null;
+    }
+
+    function updateDisplay() {
+      const combo = buildComboString();
+      
+      if (combo) {
+        comboDisplay.textContent = combo;
+        comboDisplay.classList.remove('empty');
+      } else {
+        comboDisplay.textContent = 'press any key';
+        comboDisplay.classList.add('empty');
+      }
+      
+      const matchedPad = checkForPadMatch();
+      if (matchedPad) {
+        activatePad(matchedPad);
+      } else {
+        deactivateAllPads();
+      }
+    }
+
+    // ==================== EVENT HANDLERS ====================
+    
+    function handleKeyDown(e) {
+      // Prevent default for most keys to avoid browser shortcuts
+      if (e.code !== 'F5' && e.code !== 'F12') {
+        e.preventDefault();
+      }
+      
+      // Update modifier state
+      if (e.code === 'ControlLeft' || e.code === 'ControlRight') modifierState.ctrl = true;
+      if (e.code === 'AltLeft' || e.code === 'AltRight') modifierState.alt = true;
+      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') modifierState.shift = true;
+      if (e.code === 'MetaLeft' || e.code === 'MetaRight') modifierState.meta = true;
+      
+      // Track active keys
+      activeKeys.add(e.code);
+      
+      // Update visuals
+      pressKey(e.code);
+      updateModifierVisuals();
+      updateDisplay();
+    }
+
+    function handleKeyUp(e) {
+      // Update modifier state
+      if (e.code === 'ControlLeft' || e.code === 'ControlRight') modifierState.ctrl = false;
+      if (e.code === 'AltLeft' || e.code === 'AltRight') modifierState.alt = false;
+      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') modifierState.shift = false;
+      if (e.code === 'MetaLeft' || e.code === 'MetaRight') modifierState.meta = false;
+      
+      // Remove from active keys
+      activeKeys.delete(e.code);
+      
+      // Update visuals
+      releaseKey(e.code);
+      updateModifierVisuals();
+      updateDisplay();
+    }
+
+    function handleBlur() {
+      // Clear all state when window loses focus
+      activeKeys.clear();
+      modifierState.ctrl = false;
+      modifierState.alt = false;
+      modifierState.shift = false;
+      modifierState.meta = false;
+      
+      document.querySelectorAll('.key').forEach(k => {
+        k.classList.remove('pressed', 'modifier-active');
+      });
+      
+      updateDisplay();
+      focusHint.textContent = 'click anywhere to capture keyboard';
+      focusHint.classList.remove('focused');
+    }
+
+    function handleFocus() {
+      focusHint.textContent = 'keyboard captured ✓';
+      focusHint.classList.add('focused');
+    }
+
+    // ==================== INIT ====================
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      buildHotspots();
+      
+      // Keyboard events
+      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('keyup', handleKeyUp);
+      
+      // Focus tracking
+      window.addEventListener('blur', handleBlur);
+      window.addEventListener('focus', handleFocus);
+      
+      // Initial focus check
+      if (document.hasFocus()) {
+        handleFocus();
+      }
+    });
+  </script>
+
+</body>
+</html>
