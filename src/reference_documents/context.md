@@ -60,17 +60,23 @@ From firmware analysis:
 5. **CONFIRMATION COLOR + BLINK** — mode triggered
 6. **Heartbeat starts** — D1 pulses = normal operation
 
-**When to hold pads:** After 3 D1 blinks begin, hold combo for ~1 second until you see confirmation color blink.
+⚠️ **DO NOT TOUCH pads during white swipe or D1 chirps** — causes inverted behavior.
+**When to hold pads:** After 3 D1 blinks finish, hold combo for ~1 second until you see confirmation color blink.
+
+### Boot Sequence UI (HTML)
+Steps 1–2 use `.seq-step.warning` class (red-tinted background/border, red step number).
+Warning text: `⚠ don't touch pads ⚠` (symmetric warning symbols, bold red via CSS).
+Steps 1–2 have no dot-arrow decorations (removed for clarity). Steps 4–5 retain them.
 
 ### Boot Combo Colors
 
 | Pads | Mode | Detection → Confirmation |
 |------|------|--------------------------|
-| x.1 + x.2 | CONFIG | BLUE → GREEN (blinking) |
-| x.3 + x.4 | RESET CONFIG | RED → WHITE (blinking) |
-| x.7 + x.8 | FORCE MIDI | YELLOW → RED (blinking) |
+| x.2 + x.3 | CONFIG | BLUE → GREEN (blinking) |
+| x.4 + x.5 | RESET CONFIG | RED → WHITE (blinking) |
+| x.8 + x.9 | FORCE MIDI | YELLOW → RED (blinking) |
 
-**Priority:** CONFIG (1+2) > RESET (3+4) > FORCE MIDI (7+8)
+**Priority:** CONFIG (2+3) > RESET (4+5) > FORCE MIDI (8+9)
 
 ---
 

@@ -126,10 +126,12 @@ From firmware analysis (dpx_biz_frm.ino):
 5. **confirmation** — if combo detected: color changes + blink
 6. **heartbeat starts** — D1 pulses = normal operation
 
+⚠️ **DO NOT TOUCH pads during white swipe or D1 chirps** — touching during calibration causes inverted/weird behavior.
+
 **WHEN TO HOLD PADS:**
-- After white swipe completes
-- After 3 D1 chirps
-- **START HOLDING** during settle period (don't wait for prompt)
+- Wait for white swipe to finish
+- Wait for 3 D1 chirps to finish
+- **START HOLDING** after the 3 blinks (during settle period)
 - Keep holding until you see confirmation blink (~1.5 seconds)
 - Release after confirmation
 
@@ -137,9 +139,9 @@ From firmware analysis (dpx_biz_frm.ino):
 
 | Pads | Mode | Detection → Confirmation |
 |------|------|--------------------------|
-| 1 + 2 | CONFIG | BLUE → GREEN (blink) |
-| 3 + 4 | RESET | RED → WHITE (blink) |
-| 7 + 8 | FORCE MIDI | YELLOW → RED (blink) |
+| 2 + 3 | CONFIG | BLUE → GREEN (blink) |
+| 4 + 5 | RESET | RED → WHITE (blink) |
+| 8 + 9 | FORCE MIDI | YELLOW → RED (blink) |
 
 hold ~1 second during boot.
 

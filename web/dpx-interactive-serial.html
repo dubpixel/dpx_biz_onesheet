@@ -433,6 +433,14 @@
       border: 1px solid rgba(74, 255, 122, 0.3);
     }
 
+    .seq-step.warning {
+      background: rgba(255, 74, 74, 0.08);
+      border: 1px solid rgba(255, 74, 74, 0.25);
+    }
+
+    .seq-step.warning .seq-num { background: var(--red); color: #000; }
+    .seq-step.warning .seq-text strong { color: var(--red); }
+
     .seq-num {
       width: 18px;
       height: 18px;
@@ -1046,8 +1054,8 @@
         </div>
 
         <div class="sequence-steps">
-          <div class="seq-step"><span class="seq-num">1</span><span class="seq-text">white swipe <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:white;border-radius:50%;border:1px solid #555;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:white;border-radius:50%;border:1px solid #444;box-shadow:0 0 4px rgba(255,255,255,0.5);"></span></span></span></div>
-          <div class="seq-step"><span class="seq-num">2</span><span class="seq-text">3× d1 chirps <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:white;border-radius:50%;border:1px solid #555;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:white;border-radius:50%;border:1px solid #444;box-shadow:0 0 6px rgba(255,255,255,0.8);"></span></span></span></div>
+          <div class="seq-step warning"><span class="seq-num">1</span><span class="seq-text">white swipe <strong>⚠ don't touch</strong></span></div>
+          <div class="seq-step warning"><span class="seq-num">2</span><span class="seq-text">3× d1 chirps <strong>⚠ don't touch</strong></span></div>
           <div class="seq-step highlight"><span class="seq-num">3</span><span class="seq-text"><strong>HOLD PADS</strong> — use boot_combos for special modes</span></div>
           <div class="seq-step"><span class="seq-num">4</span><span class="seq-text">detection color <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;opacity:0.6;"></span></span></span></div>
           <div class="seq-step"><span class="seq-num">5</span><span class="seq-text">confirm blink <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;opacity:0.6;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #666;box-shadow:0 0 6px rgba(201,162,39,0.8);"></span></span></span></div>

@@ -129,7 +129,7 @@ Configuration is done via a simple text file accessible by holding two pads duri
 
   2. **Choose your mode:**
      - **HID Keyboard** (d3 control) → Jumper OPEN (default)
-     - **MIDI Controller** (show control ) → Jumper CLOSED or hold pads 7+8 during boot
+     - **MIDI Controller** (show control ) → Jumper CLOSED or hold pads 8+9 during boot
 
   3. **Test it out**
      ```
@@ -153,11 +153,11 @@ Hold touch pads during power-on/reset to access special modes:
 
 | Pads | Mode | Description |
 |------|------|-------------|
-| **1 + 2** | CONFIG Mode | Device appears as USB drive for `config.txt` editing. Save config.txt then press reset button (WARNING: ejecting causes drive to re-mount. dont do this). |
-| **3 + 4** | RESET CONFIG | Resets configuration to factory defaults and reboots |
-| **7 + 8** | FORCE MIDI | Forces MIDI mode regardless of jumper setting |
+| **2 + 3** | CONFIG Mode | Device appears as USB drive for `config.txt` editing. Save config.txt then press reset button (WARNING: ejecting causes drive to re-mount. dont do this). |
+| **4 + 5** | RESET CONFIG | Resets configuration to factory defaults and reboots |
+| **8 + 9** | FORCE MIDI | Forces MIDI mode regardless of jumper setting |
 
-**Priority Order:** Config mode (1+2) → Reset (3+4) → Force MIDI (7+8)
+**Priority Order:** Config mode (2+3) → Reset (4+5) → Force MIDI (8+9)
 
 #### Boot Sequence & Timing
 
@@ -166,9 +166,9 @@ Hold touch pads during power-on/reset to access special modes:
 3. **Touch sensing activates** - safe to touch pads now
 4. **Hold pad combination ~1 second** to trigger boot mode
 5. **Detection color appears** on held pads:
-   - BLUE (pads 1+2) = CONFIG Mode
-   - RED (pads 3+4) = RESET CONFIG
-   - YELLOW (pads 7+8) = FORCE MIDI
+   - BLUE (pads 2+3) = CONFIG Mode
+   - RED (pads 4+5) = RESET CONFIG
+   - YELLOW (pads 8+9) = FORCE MIDI
 6. **Confirmation color blinks** when mode triggers:
    - GREEN blinking = CONFIG Mode confirmed
    - WHITE blinking = RESET CONFIG confirmed

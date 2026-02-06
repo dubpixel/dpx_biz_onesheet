@@ -34,9 +34,9 @@ This document contains all functional data needed for a visual design agent to c
 | 11 | Bottom row, near center | ✗ |
 
 **Boot Combo Groupings:**
-- Pads **1 + 2** → CONFIG Mode
-- Pads **3 + 4** → RESET CONFIG
-- Pads **7 + 8** → FORCE MIDI
+- Pads **2 + 3** → CONFIG Mode
+- Pads **4 + 5** → RESET CONFIG
+- Pads **8 + 9** → FORCE MIDI
 
 ---
 
@@ -44,11 +44,11 @@ This document contains all functional data needed for a visual design agent to c
 
 | Pads | Mode | Detection Color | Confirmation Color | Description |
 |------|------|-----------------|-------------------|-------------|
-| 1 + 2 | CONFIG | BLUE | GREEN (blinking) | USB drive for config.txt editing |
-| 3 + 4 | RESET CONFIG | RED | WHITE (blinking) | Factory reset |
-| 7 + 8 | FORCE MIDI | YELLOW | RED (blinking) | MIDI mode regardless of jumper |
+| 2 + 3 | CONFIG | BLUE | GREEN (blinking) | USB drive for config.txt editing |
+| 4 + 5 | RESET CONFIG | RED | WHITE (blinking) | Factory reset |
+| 8 + 9 | FORCE MIDI | YELLOW | RED (blinking) | MIDI mode regardless of jumper |
 
-**Priority Order:** CONFIG (1+2) → RESET (3+4) → FORCE MIDI (7+8)
+**Priority Order:** CONFIG (2+3) → RESET (4+5) → FORCE MIDI (8+9)
 
 **Timing:** Hold pads ~1 second during boot
 
@@ -141,7 +141,7 @@ pad_5_led_base_b=0
 - **Back:** Config syntax cheat sheet, troubleshooting one-liners
 
 ### Visual Emphasis
-1. **Boot combo pads** - highlight 1+2, 3+4, 7+8 groupings with their colors
+1. **Boot combo pads** - highlight 2+3, 4+5, 8+9 groupings with their colors
 2. **Button locations** - clear callouts for BOOT and RESET with their actual functions
 3. **Status LED** - mark D1 location
 4. **Pads without LEDs** - indicate 10 and 11 are LED-less
