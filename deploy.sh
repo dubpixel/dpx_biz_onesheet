@@ -10,9 +10,9 @@ echo "Deploying DPX BIZ ONESHEET..."
 echo "Copying dpx-interactive.html → web/index.html"
 cp "$SRC_DIR/dpx-interactive.html" "$WEB_DIR/index.html"
 
-# Copy dpx-interactive-serial.html
-echo "Copying dpx-interactive-serial.html → web/dpx-interactive-serial.html"
-cp "$SRC_DIR/dpx-interactive-serial.html" "$WEB_DIR/dpx-interactive-serial.html"
+# Copy dpx-interactive-noSerial.html
+echo "Copying dpx-interactive-noSerial.html → web/dpx-interactive-noSerial.html"
+cp "$SRC_DIR/dpx-interactive-noSerial.html" "$WEB_DIR/dpx-interactive-noSerial.html"
 
 # Copy config-reference.html
 echo "Copying config-reference.html → web/config-reference.html"

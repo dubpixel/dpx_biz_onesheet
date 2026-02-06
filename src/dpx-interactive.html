@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dpx_biz interactive reference v2.2.1</title>
+  <title>dpx_biz interactive reference v2.3.0</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -651,9 +651,307 @@
       color: #555;
       margin-top: 8px;
     }
+
+    /* ==================== SERIAL DEBUG PANEL ==================== */
+    
+    /* Body padding to account for collapsed panel */
+    body.serial-enabled {
+      padding-bottom: 50px;
+    }
+
+    body.serial-expanded {
+      padding-bottom: 310px;
+    }
+
+    body.serial-maximized {
+      padding-bottom: calc(60vh + 10px);
+    }
+
+    .serial-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border-top: 2px solid #333;
+      z-index: 1000;
+      transition: height 0.3s ease;
+    }
+
+    .serial-panel.collapsed {
+      height: 40px;
+    }
+
+    .serial-panel.expanded {
+      height: 300px;
+    }
+
+    .serial-panel.maximized {
+      height: 60vh;
+    }
+
+    .serial-tab {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 40px;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+    }
+
+    .serial-tab:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .serial-tab-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .serial-tab-icon {
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .serial-panel.expanded .serial-tab-icon,
+    .serial-panel.maximized .serial-tab-icon {
+      transform: rotate(180deg);
+    }
+
+    .serial-tab-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: lowercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .serial-tab-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .serial-tab-status.disconnected {
+      background: rgba(255, 74, 74, 0.2);
+      color: var(--red);
+    }
+
+    .serial-tab-status.connected {
+      background: rgba(74, 255, 122, 0.2);
+      color: var(--green);
+    }
+
+    .serial-tab-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .serial-maximize-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .serial-maximize-btn:hover {
+      color: var(--gold);
+    }
+
+    .serial-content {
+      display: none;
+      flex-direction: column;
+      height: calc(100% - 40px);
+    }
+
+    .serial-panel.expanded .serial-content,
+    .serial-panel.maximized .serial-content {
+      display: flex;
+    }
+
+    .serial-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      border-bottom: 1px solid #333;
+      flex-wrap: wrap;
+    }
+
+    .serial-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .serial-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .serial-btn.connect {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .serial-btn.connect:hover {
+      background: rgba(74, 255, 122, 0.1);
+    }
+
+    .serial-btn.disconnect {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .serial-btn.disconnect:hover {
+      background: rgba(255, 74, 74, 0.1);
+    }
+
+    .serial-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .serial-select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .serial-select:hover {
+      border-color: var(--gold);
+    }
+
+    .serial-warning {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--yellow);
+      margin-left: auto;
+    }
+
+    .serial-terminal-wrap {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .serial-terminal {
+      height: 100%;
+      overflow-y: auto;
+      padding: 12px 16px;
+      background: #0d0d0d;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .serial-line {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .serial-line.sent {
+      color: var(--blue);
+    }
+
+    .serial-line.sent::before {
+      content: '← ';
+      color: var(--text-dim);
+    }
+
+    .serial-line.received::before {
+      content: '→ ';
+      color: var(--text-dim);
+    }
+
+    .serial-timestamp {
+      color: var(--text-dim);
+      margin-right: 8px;
+      font-size: 0.65rem;
+    }
+
+    /* Highlighting classes - to be populated by filter rules */
+    .log-error { color: var(--red); }
+    .log-warn { color: var(--yellow); }
+    .log-success { color: var(--green); }
+    .log-info { color: var(--blue); }
+    .log-dim { color: var(--text-dim); }
+
+    .serial-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-top: 1px solid #333;
+      background: var(--bg-card);
+    }
+
+    .serial-input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    .serial-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .serial-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .serial-options {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-left: 8px;
+    }
+
+    .serial-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+
+    .serial-checkbox input {
+      accent-color: var(--gold);
+    }
   </style>
 </head>
-<body>
+<body class="serial-enabled">
   <header class="header">
     <h1>dpx_biz</h1>
     <p class="subtitle">hover over pads to learn more</p>
@@ -893,8 +1191,62 @@
       <img src="images/logo.png" alt="dubpixel" class="footer-logo">
     </a>
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v2.2.1</div>
+    <div class="footer-version">v2.3.0</div>
   </footer>
+
+  <!-- ==================== SERIAL DEBUG PANEL ==================== -->
+  <div class="serial-panel collapsed" id="serialPanel">
+    <div class="serial-tab" id="serialTab">
+      <div class="serial-tab-left">
+        <span class="serial-tab-icon">▲</span>
+        <span class="serial-tab-title">serial_debug</span>
+        <span class="serial-tab-status disconnected" id="serialStatus">disconnected</span>
+      </div>
+      <div class="serial-tab-right">
+        <button class="serial-maximize-btn" id="serialMaximize" title="maximize">⤢</button>
+      </div>
+    </div>
+    <div class="serial-content">
+      <div class="serial-toolbar">
+        <button class="serial-btn connect" id="serialConnect">Connect</button>
+        <select class="serial-select" id="serialBaud">
+          <option value="9600">9600</option>
+          <option value="19200">19200</option>
+          <option value="38400">38400</option>
+          <option value="57600">57600</option>
+          <option value="115200" selected>115200</option>
+          <option value="230400">230400</option>
+          <option value="460800">460800</option>
+          <option value="921600">921600</option>
+        </select>
+        <button class="serial-btn" id="serialClear">Clear</button>
+        <button class="serial-btn" id="serialCopy">Copy</button>
+        <div class="serial-warning" id="serialWarning" style="display: none;">
+          ⚠ requires Chrome or Edge
+        </div>
+      </div>
+      <div class="serial-terminal-wrap">
+        <div class="serial-terminal" id="serialTerminal">
+          <div class="serial-line log-dim">// serial terminal ready</div>
+          <div class="serial-line log-dim">// click Connect to select device</div>
+        </div>
+      </div>
+      <div class="serial-input-row">
+        <input type="text" class="serial-input" id="serialInput" placeholder="type command and press Enter..." disabled>
+        <button class="serial-btn" id="serialSend" disabled>Send</button>
+        <div class="serial-options">
+          <label class="serial-checkbox">
+            <input type="checkbox" id="serialAutoScroll" checked>
+            auto-scroll
+          </label>
+          <label class="serial-checkbox">
+            <input type="checkbox" id="serialTimestamps">
+            timestamps
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Pad tooltip data
@@ -1021,7 +1373,301 @@
         labelPhoto.classList.toggle('active', !isJlc);
         labelJlc.classList.toggle('active', isJlc);
       });
+
+      // ==================== SERIAL DEBUG ==================== 
+      initSerial();
     });
+
+    // ==================== SERIAL DEBUG FUNCTIONS ====================
+
+    function initSerial() {
+      const panel = document.getElementById('serialPanel');
+      const tab = document.getElementById('serialTab');
+      const maximizeBtn = document.getElementById('serialMaximize');
+      const connectBtn = document.getElementById('serialConnect');
+      const baudSelect = document.getElementById('serialBaud');
+      const clearBtn = document.getElementById('serialClear');
+      const copyBtn = document.getElementById('serialCopy');
+      const terminal = document.getElementById('serialTerminal');
+      const input = document.getElementById('serialInput');
+      const sendBtn = document.getElementById('serialSend');
+      const autoScrollCheck = document.getElementById('serialAutoScroll');
+      const timestampsCheck = document.getElementById('serialTimestamps');
+      const statusEl = document.getElementById('serialStatus');
+      const warningEl = document.getElementById('serialWarning');
+
+      // Check for Web Serial API support
+      const serialSupported = 'serial' in navigator;
+      if (!serialSupported) {
+        warningEl.style.display = 'flex';
+        connectBtn.disabled = true;
+      }
+
+      // Serial state
+      let port = null;
+      let reader = null;
+      let writer = null;
+      let readLoopActive = false;
+
+      // ==================== FILTER RULES FRAMEWORK ====================
+      // Another agent can populate this based on firmware syntax analysis
+      const FILTER_RULES = [
+        // Example rules - to be filled in based on actual firmware output:
+        // { pattern: /^ERROR:/i, className: 'log-error' },
+        // { pattern: /^WARN:/i, className: 'log-warn' },
+        // { pattern: /^OK/i, className: 'log-success' },
+        // { pattern: /pad_\d+/, className: 'log-info' },
+        // { pattern: /^#/, className: 'log-dim' },
+      ];
+
+      function applyHighlighting(text) {
+        for (const rule of FILTER_RULES) {
+          if (rule.pattern.test(text)) {
+            return rule.className;
+          }
+        }
+        return '';
+      }
+      // ==================== END FILTER RULES ====================
+
+      // Panel toggle
+      tab.addEventListener('click', (e) => {
+        if (e.target === maximizeBtn || e.target.closest('.serial-maximize-btn')) return;
+        
+        if (panel.classList.contains('maximized')) {
+          panel.classList.remove('maximized');
+          panel.classList.add('expanded');
+          document.body.classList.remove('serial-maximized');
+          document.body.classList.add('serial-expanded');
+        } else if (panel.classList.contains('expanded')) {
+          panel.classList.remove('expanded');
+          panel.classList.add('collapsed');
+          document.body.classList.remove('serial-expanded');
+        } else {
+          panel.classList.remove('collapsed');
+          panel.classList.add('expanded');
+          document.body.classList.add('serial-expanded');
+        }
+      });
+
+      // Maximize toggle
+      maximizeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (panel.classList.contains('maximized')) {
+          panel.classList.remove('maximized');
+          panel.classList.add('expanded');
+          document.body.classList.remove('serial-maximized');
+          document.body.classList.add('serial-expanded');
+          maximizeBtn.textContent = '⤢';
+          maximizeBtn.title = 'maximize';
+        } else {
+          panel.classList.remove('collapsed', 'expanded');
+          panel.classList.add('maximized');
+          document.body.classList.remove('serial-expanded');
+          document.body.classList.add('serial-maximized');
+          maximizeBtn.textContent = '⤡';
+          maximizeBtn.title = 'restore';
+        }
+      });
+
+      // Connect/Disconnect
+      connectBtn.addEventListener('click', async () => {
+        if (port) {
+          await disconnectSerial();
+        } else {
+          await connectSerial();
+        }
+      });
+
+      async function connectSerial() {
+        try {
+          port = await navigator.serial.requestPort();
+          const baudRate = parseInt(baudSelect.value);
+          await port.open({ baudRate });
+
+          // Update UI
+          connectBtn.textContent = 'Disconnect';
+          connectBtn.classList.remove('connect');
+          connectBtn.classList.add('disconnect');
+          statusEl.textContent = 'connected';
+          statusEl.classList.remove('disconnected');
+          statusEl.classList.add('connected');
+          input.disabled = false;
+          sendBtn.disabled = false;
+          baudSelect.disabled = true;
+
+          appendLine('// connected at ' + baudRate + ' baud', 'log-success');
+
+          // Start read loop
+          readLoopActive = true;
+          readLoop();
+
+        } catch (err) {
+          appendLine('// connection failed: ' + err.message, 'log-error');
+        }
+      }
+
+      async function disconnectSerial() {
+        readLoopActive = false;
+        
+        if (reader) {
+          try {
+            await reader.cancel();
+            reader.releaseLock();
+          } catch (e) {}
+          reader = null;
+        }
+
+        if (port) {
+          try {
+            await port.close();
+          } catch (e) {}
+          port = null;
+        }
+
+        // Update UI
+        connectBtn.textContent = 'Connect';
+        connectBtn.classList.remove('disconnect');
+        connectBtn.classList.add('connect');
+        statusEl.textContent = 'disconnected';
+        statusEl.classList.remove('connected');
+        statusEl.classList.add('disconnected');
+        input.disabled = true;
+        sendBtn.disabled = true;
+        baudSelect.disabled = false;
+
+        appendLine('// disconnected', 'log-dim');
+      }
+
+      async function readLoop() {
+        const decoder = new TextDecoder();
+        let lineBuffer = '';
+
+        while (port && port.readable && readLoopActive) {
+          try {
+            reader = port.readable.getReader();
+            
+            while (readLoopActive) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              
+              const text = decoder.decode(value);
+              lineBuffer += text;
+
+              // Process complete lines
+              const lines = lineBuffer.split('\n');
+              lineBuffer = lines.pop(); // Keep incomplete line in buffer
+
+              for (const line of lines) {
+                if (line.trim()) {
+                  appendLine(line.trim(), applyHighlighting(line.trim()), 'received');
+                }
+              }
+            }
+
+            reader.releaseLock();
+            reader = null;
+
+          } catch (err) {
+            if (readLoopActive) {
+              appendLine('// read error: ' + err.message, 'log-error');
+            }
+            break;
+          }
+        }
+      }
+
+      // Send data
+      async function sendData(text) {
+        if (!port || !port.writable) return;
+
+        try {
+          writer = port.writable.getWriter();
+          const encoder = new TextEncoder();
+          await writer.write(encoder.encode(text + '\n'));
+          writer.releaseLock();
+          writer = null;
+
+          appendLine(text, 'sent', 'sent');
+
+        } catch (err) {
+          appendLine('// send error: ' + err.message, 'log-error');
+        }
+      }
+
+      sendBtn.addEventListener('click', () => {
+        const text = input.value.trim();
+        if (text) {
+          sendData(text);
+          input.value = '';
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const text = input.value.trim();
+          if (text) {
+            sendData(text);
+            input.value = '';
+          }
+        }
+      });
+
+      // Clear terminal
+      clearBtn.addEventListener('click', () => {
+        terminal.innerHTML = '<div class="serial-line log-dim">// terminal cleared</div>';
+      });
+
+      // Copy terminal
+      copyBtn.addEventListener('click', () => {
+        const text = Array.from(terminal.querySelectorAll('.serial-line'))
+          .map(el => el.textContent)
+          .join('\n');
+        navigator.clipboard.writeText(text).then(() => {
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => copyBtn.textContent = originalText, 1500);
+        });
+      });
+
+      // Append line to terminal
+      function appendLine(text, className = '', type = 'received') {
+        const line = document.createElement('div');
+        line.className = 'serial-line';
+        if (className) line.classList.add(className);
+        if (type === 'sent') line.classList.add('sent');
+        if (type === 'received' && !className.includes('log-')) line.classList.add('received');
+
+        // Optional timestamp
+        if (timestampsCheck.checked) {
+          const ts = document.createElement('span');
+          ts.className = 'serial-timestamp';
+          const now = new Date();
+          ts.textContent = now.toLocaleTimeString('en-US', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
+          line.appendChild(ts);
+        }
+
+        line.appendChild(document.createTextNode(text));
+        terminal.appendChild(line);
+
+        // Auto-scroll
+        if (autoScrollCheck.checked) {
+          terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Limit lines (keep last 1000)
+        while (terminal.children.length > 1000) {
+          terminal.removeChild(terminal.firstChild);
+        }
+      }
+
+      // Handle page unload
+      window.addEventListener('beforeunload', () => {
+        if (port) {
+          disconnectSerial();
+        }
+      });
+    }
   </script>
 
 </body>
