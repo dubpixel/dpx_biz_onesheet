@@ -48,4 +48,11 @@ if [ -d "$SRC_DIR/samples" ]; then
   cp -r "$SRC_DIR/samples/"* "$WEB_DIR/samples/"
 fi
 
+# Copy images folder
+if [ -d "$SRC_DIR/images" ]; then
+  echo "Copying images folder → web/images/"
+  mkdir -p "$WEB_DIR/images"
+  cp -r "$SRC_DIR/images/"* "$WEB_DIR/images/"
+fi
+
 echo "✓ Deploy complete"
