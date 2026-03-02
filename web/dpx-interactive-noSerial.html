@@ -894,7 +894,7 @@
       <img src="images/logo.png" alt="dubpixel" class="footer-logo">
     </a>
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v2.2.2</div>
+    <div class="footer-version" id="pageVersion"></div>
   </footer>
 
   <script>
@@ -1025,5 +1025,7 @@
     });
   </script>
 
+  <script src="version.js"></script>
+  <script>document.getElementById('pageVersion').textContent = DPX_VERSIONS['dpx-interactive-noSerial'];</script>
 </body>
 </html>

@@ -28,6 +28,10 @@ if [ -f "$SRC_DIR/dpx_biz_hid.html" ]; then
   cp "$SRC_DIR/dpx_biz_hid.html" "$WEB_DIR/dpx_biz_hid.html"
 fi
 
+# Copy version.js (centralized version config)
+echo "Copying version.js → web/version.js"
+cp "$SRC_DIR/version.js" "$WEB_DIR/version.js"
+
 # Copy hotspots.json only if changed
 if [ -f "$WEB_DIR/hotspots.json" ]; then
   if cmp -s "$SRC_DIR/hotspots.json" "$WEB_DIR/hotspots.json"; then

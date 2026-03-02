@@ -1192,7 +1192,7 @@
       <img src="images/logo.png" alt="dubpixel" class="footer-logo">
     </a>
     <div class="footer-tagline">making strange things daily</div>
-    <div class="footer-version">v2.3.1</div>
+    <div class="footer-version" id="pageVersion"></div>
   </footer>
 
   <!-- ==================== SERIAL DEBUG PANEL ==================== -->
@@ -1671,5 +1671,7 @@
     }
   </script>
 
+  <script src="version.js"></script>
+  <script>document.getElementById('pageVersion').textContent = DPX_VERSIONS['dpx-interactive'];</script>
 </body>
 </html>
