@@ -9,6 +9,7 @@
 **/zz_reference/**
 **/ZZ_IGNORE/**
 **/zz_archive/**
+**/zzz_archive/**
 
 # other stuff
 **/.DS_Store
