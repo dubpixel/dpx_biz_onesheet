@@ -66,7 +66,10 @@
 this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB business card. it's a standalone html page that lets you hover over each touch pad to see what it does—boot combos, HID mappings, MIDI notes, LED colors, and more.
 
 **key features:**
+- **quickstart card** – plug-in walkthrough up front for first-time users, no prior context needed
 - **interactive pcb map** – hover over any of the 10 touch pads to see its function
+- **live boot-swipe preview** – replays the real boot LED sequence on the actual pcb image, hoverable from the boot sequence card
+- **hover highlighting** – hardware items and boot combos light their matching pad(s) on the pcb, with combo rows showing the real detect→confirm color sequence
 - **soft glowing halos** – visual feedback on hover with smooth fade in/out
 - **smart tooltips** – auto-position to avoid clipping at edges
 - **config reference** – full config.txt syntax documentation included
@@ -135,9 +138,9 @@ _the dpx_biz is a business card that actually does something—it's a USB HID de
 
 | combo | mode | what it does |
 |-------|------|--------------|
-| **pad 1 + 2** | config mode | mounts as USB drive to edit config.txt |
-| **pad 3 + 4** | factory reset | clears config, restores defaults |
-| **pad 7 + 8** | force MIDI | boots in MIDI mode regardless of config |
+| **pad 2 + 3** | config mode | mounts as USB drive to edit config.txt |
+| **pad 4 + 5** | factory reset | clears config, restores defaults |
+| **pad 8 + 9** | force MIDI | boots in MIDI mode regardless of config |
 
 ### touch tips
 
@@ -176,6 +179,9 @@ _see the interactive page for the complete pad→key→midi mapping table_
 - [ ] correct popup bounds for narrow portait clipping
 - [x] insert URL into readme
 - [x] add links and firmware
+- [x] quickstart walkthrough for first-time users
+- [x] live boot-swipe animation on the real pcb image
+- [x] hover highlighting for hardware items and boot combos
 
 See the [open issues](https://github.com/dubpixel/dpx_biz_onesheet/issues) for a full list of proposed features (and known issues).
 
@@ -230,7 +236,7 @@ _Questions about commercial use? Open an issue or reach out._
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/dubpixel/dpx_biz_onesheet.svg?style=flat-square
 [contributors-url]: https://github.com/dubpixel/dpx_biz_onesheet/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/gdubpixel/dpx_biz_onesheet.svg?style=flat-square
+[forks-shield]: https://img.shields.io/github/forks/dubpixel/dpx_biz_onesheet.svg?style=flat-square
 [forks-url]: https://github.com/dubpixel/dpx_biz_onesheet/network/members
 [stars-shield]: https://img.shields.io/github/stars/dubpixel/dpx_biz_onesheet.svg?style=flat-square
 [stars-url]: https://github.com/dubpixel/dpx_biz_onesheet/stargazers
