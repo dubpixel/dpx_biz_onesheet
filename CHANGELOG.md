@@ -1,5 +1,10 @@
 # Changelog
 
+## dpx-interactive v2.4.1 / dpx-interactive-noSerial v2.3.1 - 2026-08-22
+
+### Added
+- Desktop-only notice on the quickstart card and README Prerequisites - mounting as a drive, config editing, firmware flashing, and the serial debug panel don't work on phones/tablets
+
 ## dpx-interactive v2.4.0 / dpx-interactive-noSerial v2.3.0 / config-reference v2.0.2 - 2026-08-21
 
 ### Added

@@ -114,6 +114,7 @@ _the dpx_biz is a business card that actually does something—it's a USB HID de
   * any modern web browser (chrome, firefox, safari, edge)
   * a dpx_biz card (contact i@dubpixel.tv for details)
   * usb-c cable
+  * **a desktop or laptop** — mounting the card as a drive, editing config.txt, flashing firmware, and the serial debug panel all require a real computer; phones/tablets aren't supported
   
 ### Installation
 

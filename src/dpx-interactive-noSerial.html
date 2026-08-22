@@ -448,6 +448,17 @@
     .qs-text strong { color: var(--gold); }
     .qs-text a { color: var(--blue); }
 
+    .qs-notice {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      background: rgba(201, 162, 39, 0.08);
+      border: 1px solid rgba(201, 162, 39, 0.3);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+    }
+
     .card {
       background: var(--bg-card);
       border-radius: 12px;
@@ -788,6 +799,7 @@
     <!-- Quickstart -->
     <div class="card quickstart-card" id="quickstart">
       <h2 class="card-title">quickstart</h2>
+      <div class="qs-notice">desktop or laptop only — mounting as a drive, config editing, and firmware flashing don't work on phones or tablets</div>
       <div class="qs-steps">
         <div class="qs-step">
           <span class="qs-num">1</span>
