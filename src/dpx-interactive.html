@@ -39,10 +39,20 @@
       color: var(--white);
     }
 
+    .header .tagline {
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-top: 6px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .header .subtitle {
       color: var(--text-dim);
       font-size: 0.85rem;
       font-family: 'JetBrains Mono', monospace;
+      margin-top: 6px;
     }
 
     .main-container {
@@ -60,15 +70,16 @@
     /* Image Toggle Switch */
     .pcb-toggle-wrap {
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 6px;
+      max-width: 900px;
+      margin: 8px auto 0;
     }
 
     .toggle-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       color: var(--text-dim);
       transition: color 0.3s ease;
     }
@@ -79,10 +90,10 @@
 
     .toggle-switch {
       position: relative;
-      width: 48px;
-      height: 24px;
+      width: 34px;
+      height: 17px;
       background: #333;
-      border-radius: 12px;
+      border-radius: 9px;
       cursor: pointer;
       transition: background 0.3s ease;
       border: 1px solid #444;
@@ -95,18 +106,18 @@
     .toggle-switch::before {
       content: '';
       position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 18px;
-      height: 18px;
+      top: 1px;
+      left: 1px;
+      width: 13px;
+      height: 13px;
       background: var(--gold);
       border-radius: 50%;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 8px rgba(201, 162, 39, 0.5);
+      box-shadow: 0 0 6px rgba(201, 162, 39, 0.5);
     }
 
     .toggle-switch.toggled::before {
-      transform: translateX(24px);
+      transform: translateX(17px);
     }
 
     .pcb-map {
@@ -162,28 +173,104 @@
       border-radius: 50%;
       background: radial-gradient(circle, rgba(201, 162, 39, 0.8) 0%, rgba(201, 162, 39, 0.4) 35%, rgba(201, 162, 39, 0.15) 60%, rgba(201, 162, 39, 0) 100%);
       opacity: 0;
-      transition: opacity 0.5s ease;
+      /* fade out (leaving hover) is slow; .hotspot:hover::before overrides this to be quick on the way in */
+      transition: opacity 0.6s ease;
       pointer-events: none;
     }
 
     /* Smaller halo for edge pads (1, 10, SW2, d1) to avoid clipping */
-    .hotspot.edge-halo::before {
+    .hotspot.edge-halo::before,
+    .hotspot.edge-halo::after {
       top: 50% !important;
       left: 50% !important;
       width: 150% !important;
       height: 150% !important;
       transform: translate(-50%, -50%) !important;
-      background: radial-gradient(circle, rgba(201, 162, 39, 0.7) 0%, rgba(201, 162, 39, 0.35) 35%, rgba(201, 162, 39, 0.1) 60%, rgba(201, 162, 39, 0) 100%);
     }
-
-    @keyframes haloPulse {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
+    .hotspot.edge-halo::before {
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.7) 0%, rgba(201, 162, 39, 0.35) 35%, rgba(201, 162, 39, 0.1) 60%, rgba(201, 162, 39, 0) 100%);
     }
 
     .hotspot:hover::before {
       opacity: 1;
-      animation: haloPulse 2s ease-in-out infinite;
+      transition: opacity 0.15s ease;
+    }
+
+    /* Boot swipe / highlight preview - separate white glow (::after) so it never has to
+       cross-fade against the gold hover halo's gradient (gradients don't interpolate) */
+    .hotspot::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 35%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+
+    .hotspot.swipe-glow::after {
+      opacity: 1;
+      transition: opacity 0.15s ease;
+    }
+
+    /* LED marker - dedicated glow sized/offset to the actual LED footprint (measured from the photo), softly blanketed like the touch-pad halo */
+    .led-marker {
+      position: absolute;
+      width: 3.8%;
+      height: 7%;
+      pointer-events: none;
+    }
+
+    .led-marker::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 260%;
+      height: 260%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.45) 35%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .led-marker.swipe-glow::before {
+      opacity: 1;
+      transition: opacity 0.15s ease;
+    }
+
+    /* Boot combo LED - colored glow (blue/red/yellow detection, then blinking green/white/red
+       confirm) on the same LED position, driven entirely via inline background from JS so the
+       color itself never has to cross-fade (see comboColors in the script) */
+    .combo-led {
+      position: absolute;
+      width: 3.8%;
+      height: 7%;
+      pointer-events: none;
+    }
+
+    .combo-led::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 260%;
+      height: 260%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--combo-bg, transparent);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .combo-led.show::before {
+      opacity: 1;
     }
 
     /* Tooltip */
@@ -303,6 +390,64 @@
       .cards-grid { grid-template-columns: 1fr; }
     }
 
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .cards-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      .cards-row { grid-template-columns: 1fr; }
+    }
+
+    /* Quickstart */
+    .quickstart-card {
+      border-left: 3px solid var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .qs-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .qs-step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .qs-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .qs-text {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .qs-text strong { color: var(--gold); }
+    .qs-text a { color: var(--blue); }
+
     .card {
       background: var(--bg-card);
       border-radius: 12px;
@@ -378,41 +523,6 @@
     .hw-desc { font-size: 0.7rem; color: var(--text); margin-top: 2px; }
 
     /* Boot Sequence */
-    .sequence-visual {
-      background: #0d0d0d;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .swipe-animation {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-      margin-bottom: 6px;
-    }
-
-    .swipe-led {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #333;
-      animation: swipe 2.5s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.15s);
-    }
-
-    @keyframes swipe {
-      0%, 20% { background: #333; box-shadow: none; }
-      25%, 35% { background: #fff; box-shadow: 0 0 8px #fff; }
-      40%, 100% { background: #333; box-shadow: none; }
-    }
-
-    .swipe-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--text-dim);
-    }
 
     .sequence-steps {
       display: flex;
@@ -461,6 +571,17 @@
     .seq-text strong { color: var(--white); }
     .seq-step.highlight .seq-text strong { color: var(--green); }
 
+    .seq-hover {
+      text-decoration: underline dotted;
+      text-underline-offset: 3px;
+      cursor: help;
+      transition: color 0.2s ease;
+    }
+    .seq-hover:hover { color: var(--gold); }
+
+    .hw-hover { cursor: help; transition: background 0.2s ease; }
+    .hw-hover:hover { background: rgba(201, 162, 39, 0.08); }
+
     /* Quick fixes */
     .tip-item {
       display: flex;
@@ -473,6 +594,7 @@
     .tip-item:last-child { border-bottom: none; }
     .tip-icon { color: var(--red); font-weight: bold; }
     .tip-item strong { color: var(--green); }
+    .tip-item.combo-note strong { color: var(--gold); }
 
     /* Boot combos */
     .combo-grid { display: flex; flex-direction: column; gap: 8px; }
@@ -954,39 +1076,63 @@
 </head>
 <body class="serial-enabled">
   <header class="header">
-    <h1>dpx_biz</h1>
+    <h1><a href="https://github.com/dubpixel/dpx_biz_onesheet" style="color: inherit; text-decoration: none;">dpx_biz</a></h1>
+    <p class="tagline">a dual-mode USB controller &mdash; RP2040-based, 12 capacitive touch pads send HID keystrokes or MIDI notes</p>
     <p class="subtitle">hover over pads to learn more</p>
   </header>
 
   <div class="main-container">
-    
+
+    <!-- Quickstart -->
+    <div class="card quickstart-card" id="quickstart">
+      <h2 class="card-title">quickstart</h2>
+      <div class="qs-steps">
+        <div class="qs-step">
+          <span class="qs-num">1</span>
+          <div class="qs-text"><strong>plug in via USB-C.</strong> boot animation runs (~2s) — <span class="seq-hover" data-fx="swipe">white swipe</span>, then <span class="seq-hover" data-fx="chirps">3 heartbeat chirps</span>. don't touch pads during this part.</div>
+        </div>
+        <div class="qs-step">
+          <span class="qs-num">2</span>
+          <div class="qs-text"><strong>once the chirps finish, it's ready.</strong> by default it's a keyboard, mapped for an app called <em>disguise d3 designer</em> — touching a pad sends a real keystroke to whatever's focused on your computer. totally harmless — just don't touch pads while typing something important.</div>
+        </div>
+        <div class="qs-step">
+          <span class="qs-num">3</span>
+          <div class="qs-text"><strong>want to hear it instead?</strong> after the chirps finish, hold pads 8+9 for about a second (yellow → blinking red) to force MIDI mode, then open the <a href="dpx_biz_synth.html">web synth</a> — no other software needed.</div>
+        </div>
+        <div class="qs-step">
+          <span class="qs-num">4</span>
+          <div class="qs-text"><strong>want to remap it?</strong> after the chirps finish, hold pads 2+3 for about a second (blue → blinking green) — it mounts as a plain USB drive with a text file, no app required. see <code>boot_combos</code> and <code>config_syntax</code> below.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- PCB Image Section -->
     <div class="pcb-section">
+      <div class="pcb-map">
+        <img id="pcbImage" src="images/pcb-photo.png" alt="dpx_biz PCB">
+        <!-- Preload alternate image -->
+        <img src="images/pcb-photo_jlc.png" alt="" style="display:none">
+
+        <!-- Hotspots loaded from hotspots.tsv via JavaScript -->
+        <div class="hotspots-container" id="hotspotsContainer">
+          <!-- Hotspots will be injected here -->
+        </div>
+      </div>
       <!-- Image Toggle -->
       <div class="pcb-toggle-wrap">
         <span class="toggle-label" id="labelJlc">jlc_render</span>
         <div class="toggle-switch" id="pcbToggle" title="switch pcb image"></div>
         <span class="toggle-label active" id="labelPhoto">no_parts</span>
       </div>
-      <div class="pcb-map">
-        <img id="pcbImage" src="images/pcb-photo.png" alt="dpx_biz PCB">
-        <!-- Preload alternate image -->
-        <img src="images/pcb-photo_jlc.png" alt="" style="display:none">
-        
-        <!-- Hotspots loaded from hotspots.tsv via JavaScript -->
-        <div class="hotspots-container" id="hotspotsContainer">
-          <!-- Hotspots will be injected here -->
-        </div>
-      </div>
     </div>
 
-    <!-- Cards Grid -->
-    <div class="cards-grid">
-      
+    <!-- Cards Row 1 -->
+    <div class="cards-row">
+
       <!-- Hardware -->
       <div class="card">
         <h2 class="card-title">hardware</h2>
-        <div class="hw-item">
+        <div class="hw-item hw-hover" data-highlight="SW1">
           <div class="hw-icon-wrap">
             <svg class="hw-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="6" y="4" rx="2" width="12" height="16"/>
@@ -1000,7 +1146,7 @@
             <div class="hw-desc">push to reboot the device</div>
           </div>
         </div>
-        <div class="hw-item">
+        <div class="hw-item hw-hover" data-highlight="SW2">
           <div class="hw-icon-wrap">
             <svg class="hw-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="6" y="4" rx="2" width="12" height="16"/>
@@ -1014,7 +1160,7 @@
             <div class="hw-desc">hold during reboot</div>
           </div>
         </div>
-        <div class="hw-item">
+        <div class="hw-item hw-hover" data-highlight="d1">
           <div class="hw-icon-wrap led-icon">
             <svg class="hw-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 18h6"/>
@@ -1032,37 +1178,111 @@
             <div class="hw-desc">white heartbeat = running</div>
           </div>
         </div>
+        <div class="hw-item hw-hover" data-highlight="jumper">
+          <div class="hw-icon-wrap">
+            <svg class="hw-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="10" rx="3" width="18" height="4"/>
+              <circle cx="8" cy="12" r="3" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div class="hw-info">
+            <div class="hw-name">jumper.</div>
+            <div class="hw-meta">GPIO 20 — persistent mode select</div>
+            <div class="hw-desc">open = HID keyboard (default) · closed = MIDI. this sets the mode every boot — separate from the one-time FORCE MIDI combo below</div>
+          </div>
+        </div>
       </div>
 
       <!-- Boot Sequence -->
       <div class="card">
         <h2 class="card-title">boot_sequence</h2>
         
-        <div class="sequence-visual">
-          <div class="swipe-animation">
-            <div class="swipe-led" style="--i:0"></div>
-            <div class="swipe-led" style="--i:1"></div>
-            <div class="swipe-led" style="--i:2"></div>
-            <div class="swipe-led" style="--i:3"></div>
-            <div class="swipe-led" style="--i:4"></div>
-            <div class="swipe-led" style="--i:5"></div>
-            <div class="swipe-led" style="--i:6"></div>
-            <div class="swipe-led" style="--i:7"></div>
-            <div class="swipe-led" style="--i:8"></div>
-            <div class="swipe-led" style="--i:9"></div>
-          </div>
-          <div class="swipe-label">white swipe</div>
-        </div>
+        <a href="#" class="syntax-link" style="margin-bottom: 10px;" onclick="document.querySelector('.pcb-map').scrollIntoView({behavior:'smooth', block:'center'}); playBootSwipe(); return false;">▶ replay boot swipe on pcb</a>
 
         <div class="sequence-steps">
-          <div class="seq-step warning"><span class="seq-num">1</span><span class="seq-text">white swipe <strong>⚠ don't touch pads ⚠</strong></span></div>
-          <div class="seq-step warning"><span class="seq-num">2</span><span class="seq-text">3× d1 chirps <strong>⚠ don't touch pads ⚠</strong></span></div>
+          <div class="seq-step warning"><span class="seq-num">1</span><span class="seq-text"><span class="seq-hover" data-fx="swipe">white swipe</span> <strong>⚠ don't touch pads ⚠</strong></span></div>
+          <div class="seq-step warning"><span class="seq-num">2</span><span class="seq-text"><span class="seq-hover" data-fx="chirps">3× d1 chirps</span> <strong>⚠ don't touch pads ⚠</strong></span></div>
           <div class="seq-step highlight"><span class="seq-num">3</span><span class="seq-text"><strong>HOLD PADS</strong> — use boot_combos for special modes</span></div>
           <div class="seq-step"><span class="seq-num">4</span><span class="seq-text">detection color <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;opacity:0.6;"></span></span></span></div>
           <div class="seq-step"><span class="seq-num">5</span><span class="seq-text">confirm blink <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;opacity:0.6;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #666;box-shadow:0 0 6px rgba(201,162,39,0.8);"></span></span></span></div>
-          <div class="seq-step"><span class="seq-num">6</span><span class="seq-text">heartbeat = ready <svg style="display:inline-block;width:10px;height:10px;margin-left:6px;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 6v6M9 9h6"/></svg></span></div>
+          <div class="seq-step"><span class="seq-num">6</span><span class="seq-text"><span class="seq-hover" data-fx="heartbeat">heartbeat</span> = ready <svg style="display:inline-block;width:10px;height:10px;margin-left:6px;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 6v6M9 9h6"/></svg></span></div>
         </div>
       </div>
+
+      <!-- Boot Combos -->
+      <div class="card">
+        <h2 class="card-title">boot_combos</h2>
+        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">hold a combo while powering on — CONFIG mounts the card as a plain USB drive, no software required, just edit config.txt in any text editor</div>
+        <div class="combo-grid">
+          <div class="combo-row combo-config hw-hover" data-highlight="2,3" data-combo="config">
+            <div class="combo-pads">
+              <div class="combo-pad">2</div>
+              <span class="combo-plus">+</span>
+              <div class="combo-pad">3</div>
+            </div>
+            <div class="combo-info">
+              <div class="combo-name">CONFIG</div>
+              <div class="combo-desc">USB drive for config.txt</div>
+            </div>
+            <div class="combo-colors">
+              <div class="color-dot" style="background: var(--blue)"></div>
+              <span>→</span>
+              <div class="color-dot blink" style="background: var(--green)"></div>
+            </div>
+          </div>
+
+          <div class="combo-row combo-reset hw-hover" data-highlight="4,5" data-combo="reset">
+            <div class="combo-pads">
+              <div class="combo-pad">4</div>
+              <span class="combo-plus">+</span>
+              <div class="combo-pad">5</div>
+            </div>
+            <div class="combo-info">
+              <div class="combo-name">RESET</div>
+              <div class="combo-desc">factory reset settings</div>
+            </div>
+            <div class="combo-colors">
+              <div class="color-dot" style="background: var(--red)"></div>
+              <span>→</span>
+              <div class="color-dot blink" style="background: var(--white)"></div>
+            </div>
+          </div>
+
+          <div class="combo-row combo-midi hw-hover" data-highlight="8,9" data-combo="midi">
+            <div class="combo-pads">
+              <div class="combo-pad">8</div>
+              <span class="combo-plus">+</span>
+              <div class="combo-pad">9</div>
+            </div>
+            <div class="combo-info">
+              <div class="combo-name">FORCE MIDI</div>
+              <div class="combo-desc">MIDI regardless of jumper</div>
+            </div>
+            <div class="combo-colors">
+              <div class="color-dot" style="background: var(--yellow)"></div>
+              <span>→</span>
+              <div class="color-dot blink" style="background: var(--red)"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tip-item combo-note" style="margin-top: 10px; border-top: 1px solid #2a2a2a; padding-top: 10px;">
+          <span class="tip-icon">!</span>
+          <span><strong>priority:</strong> CONFIG &gt; RESET &gt; FORCE MIDI</span>
+        </div>
+        <div class="tip-item combo-note">
+          <span class="tip-icon">!</span>
+          <span><strong>saving:</strong> D1 solid white = writing, wait for heartbeat, <strong>then press boot.</strong> to apply</span>
+        </div>
+        <div class="tip-item combo-note">
+          <span class="tip-icon">!</span>
+          <span><u>don't eject the drive</u> &mdash; ejecting just re-mounts it</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Cards Row 2 -->
+    <div class="cards-row">
 
       <!-- Quick Fixes -->
       <div class="card">
@@ -1084,7 +1304,7 @@
       <!-- Config Syntax -->
       <div class="card">
         <h2 class="card-title">config_syntax</h2>
-        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">edit config.txt on usb drive during CONFIG boot mode</div>
+        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">edit config.txt on usb drive during CONFIG boot mode. defaults below are tuned for disguise d3 designer &mdash; remap any pad to your own app/DAW</div>
         <div class="syntax-pattern">pad_<span style="color: var(--yellow)">X</span>_<span style="color: var(--blue)">param</span>=<span style="color: var(--green)">value</span></div>
         <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 8px; font-family: 'JetBrains Mono', monospace;">
           <div>pad_0_hid_key=ctrl+alt+arrow_up</div>
@@ -1094,63 +1314,6 @@
           <div style="color: #555; margin-top: 4px;"># repeat for pads 1-9</div>
         </div>
         <a href="config-reference.html" class="syntax-link">view full reference →</a>
-      </div>
-
-      <!-- Boot Combos - spans 2 columns -->
-      <div class="card wide">
-        <h2 class="card-title">boot_combos</h2>
-        <div class="combo-grid">
-          <div class="combo-row combo-config">
-            <div class="combo-pads">
-              <div class="combo-pad">2</div>
-              <span class="combo-plus">+</span>
-              <div class="combo-pad">3</div>
-            </div>
-            <div class="combo-info">
-              <div class="combo-name">CONFIG</div>
-              <div class="combo-desc">USB drive for config.txt</div>
-            </div>
-            <div class="combo-colors">
-              <div class="color-dot" style="background: var(--blue)"></div>
-              <span>→</span>
-              <div class="color-dot blink" style="background: var(--green)"></div>
-            </div>
-          </div>
-
-          <div class="combo-row combo-reset">
-            <div class="combo-pads">
-              <div class="combo-pad">4</div>
-              <span class="combo-plus">+</span>
-              <div class="combo-pad">5</div>
-            </div>
-            <div class="combo-info">
-              <div class="combo-name">RESET</div>
-              <div class="combo-desc">factory reset settings</div>
-            </div>
-            <div class="combo-colors">
-              <div class="color-dot" style="background: var(--red)"></div>
-              <span>→</span>
-              <div class="color-dot blink" style="background: var(--white)"></div>
-            </div>
-          </div>
-
-          <div class="combo-row combo-midi">
-            <div class="combo-pads">
-              <div class="combo-pad">8</div>
-              <span class="combo-plus">+</span>
-              <div class="combo-pad">9</div>
-            </div>
-            <div class="combo-info">
-              <div class="combo-name">FORCE MIDI</div>
-              <div class="combo-desc">MIDI regardless of jumper</div>
-            </div>
-            <div class="combo-colors">
-              <div class="color-dot" style="background: var(--yellow)"></div>
-              <span>→</span>
-              <div class="color-dot blink" style="background: var(--red)"></div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Tools -->
@@ -1264,7 +1427,8 @@
       10: { label: 'x.10', config: 'pad_9_*', led: 'LED 5', hid: 'ctrl+alt+↓', midi: 'note 69', gpio: '11', func: 'layer down',      ttClass: 'tt-right' },
       'SW1': { label: 'SW1', config: 'n/a', led: 'n/a', hid: 'reboot', midi: 'n/a', gpio: 'n/a', func: 'push to reboot', ttClass: 'tt-right' },
       'SW2': { label: 'SW2', config: 'n/a', led: 'n/a', hid: 'bootloader', midi: 'n/a', gpio: 'n/a', func: 'hold during reboot', ttClass: 'tt-left' },
-      'd1': { label: 'd1', config: 'n/a', led: 'status', hid: 'n/a', midi: 'n/a', gpio: 'n/a', func: '3× chirps = boot,\nheartbeat = ready', ttClass: 'tt-right' }
+      'd1': { label: 'd1', config: 'n/a', led: 'status', hid: 'n/a', midi: 'n/a', gpio: 'n/a', func: '3× chirps = boot,\nheartbeat = ready', ttClass: 'tt-right' },
+      'jumper': { label: 'jumper', config: 'n/a', led: 'n/a', hid: 'n/a', midi: 'n/a', gpio: '20', func: 'open = HID (default), closed = MIDI', ttClass: 'tt-left' }
     };
 
     // Hotspot coordinates from hotspots.json (embedded for local file:// support)
@@ -1282,12 +1446,45 @@
       10: { x: 901, y: 535 },
       'SW1': { x: 1100, y: 438 },
       'SW2': { x: 855, y: 27 },
-      'd1':  { x: 1100, y: 538 }
+      'd1':  { x: 1100, y: 538 },
+      'jumper': { x: 1085, y: 493 }
     };
 
     // Image dimensions for percentage conversion
     const IMG_WIDTH = 1176;
     const IMG_HEIGHT = 676;
+
+    // Offset (px) from each pad's touch center to its physical LED, which sits above
+    // and slightly to the side of the pad on the board (the white rectangle). Measured
+    // directly from pcb-photo.png by cropping around each pad's known coordinate.
+    // Pad 10 is the arrow-shaped pad with no distinct LED chip visible in the photo,
+    // so that offset is an estimate rather than a measurement.
+    const ledOffset = {
+      1:  { dx: 0,  dy: 163 },
+      2:  { dx: 68, dy: 82 },
+      3:  { dx: 53, dy: 95 },
+      4:  { dx: 67, dy: 85 },
+      5:  { dx: 74, dy: 100 },
+      6:  { dx: 78, dy: 108 },
+      7:  { dx: 55, dy: 90 },
+      8:  { dx: 60, dy: 78 },
+      9:  { dx: 66, dy: 72 },
+      10: { dx: 0,  dy: 68 }
+    };
+
+    // Boot combo LED colors - detection color on hold, blinking confirmation color after ~1s
+    // (matches the real firmware boot sequence: detect -> hold -> confirm blink)
+    const comboColors = {
+      config: { detect: 'rgb(74,158,255)',  confirm: 'rgb(74,255,122)' },  // blue -> green
+      reset:  { detect: 'rgb(255,74,74)',   confirm: 'rgb(255,255,255)' }, // red -> white
+      midi:   { detect: 'rgb(255,221,74)',  confirm: 'rgb(255,74,74)' }    // yellow -> red
+    };
+    function comboGradient(rgb) {
+      const withAlpha = a => rgb.replace('rgb(', 'rgba(').replace(')', `,${a})`);
+      return `radial-gradient(circle, ${withAlpha(0.9)} 0%, ${withAlpha(0.5)} 35%, ${withAlpha(0.15)} 60%, ${withAlpha(0)} 100%)`;
+    }
+    const comboPads = ['2', '3', '4', '5', '8', '9'];
+    const comboLeds = {};
 
     // Build hotspots on page load
     document.addEventListener('DOMContentLoaded', () => {
@@ -1334,9 +1531,10 @@
           
         const hotspot = document.createElement('div');
         hotspot.className = 'hotspot';
-        
+        hotspot.dataset.pad = pad;
+
         // Edge pads get smaller halo to avoid clipping (pads at image edges)
-        if (pad === '1' || pad === '10' || pad === 'SW2' || pad === 'd1') {
+        if (pad === '1' || pad === '10' || pad === 'SW2' || pad === 'd1' || pad === 'jumper') {
           hotspot.classList.add('edge-halo');
         }
         
@@ -1358,8 +1556,151 @@
         `;
         
         container.appendChild(hotspot);
+
+        // LED marker - offset to align with the physical LED, used only for the
+        // boot-swipe/heartbeat glow so it doesn't move the touch/tooltip hotspot
+        if (ledOffset[pad] !== undefined) {
+          const off = ledOffset[pad];
+          const ledLeftPct = (((coords.x + off.dx) / IMG_WIDTH) * 100 - 1.9).toFixed(1);
+          const ledTopPct = (((coords.y - off.dy) / IMG_HEIGHT) * 100 - 3.5).toFixed(1);
+          const ledMarker = document.createElement('div');
+          ledMarker.className = 'led-marker';
+          ledMarker.style.left = ledLeftPct + '%';
+          ledMarker.style.top = ledTopPct + '%';
+          ledMarker.dataset.pad = pad;
+          container.appendChild(ledMarker);
+        }
         });
+
+        // Boot combo LED overlays - one per pad involved in a boot combo, positioned
+        // at the same spot as that pad's led-marker
+        comboPads.forEach(pad => {
+          const marker = container.querySelector(`.led-marker[data-pad="${pad}"]`);
+          if (!marker) return;
+          const el = document.createElement('div');
+          el.className = 'combo-led';
+          el.style.left = marker.style.left;
+          el.style.top = marker.style.top;
+          container.appendChild(el);
+          comboLeds[pad] = el;
+        });
+
+        setTimeout(playBootSwipe, 500);
       }
+
+      const padOrder = ['1','2','3','4','5','6','7','8','9','10'];
+
+      // White swipe - lights each pad's LED marker in firmware order
+      function playSwipe() {
+        const stepMs = 70;
+        padOrder.forEach((pad, i) => {
+          // Use the dedicated LED marker where we have a measured position; otherwise
+          // fall back to fading the pad's own gold touch hotspot (e.g. pad 1).
+          const el = container.querySelector(`.led-marker[data-pad="${pad}"]`)
+            || container.querySelector(`.hotspot[data-pad="${pad}"]`);
+          if (!el) return;
+          setTimeout(() => el.classList.add('swipe-glow'), i * stepMs);
+          setTimeout(() => el.classList.remove('swipe-glow'), i * stepMs + 350);
+        });
+        return padOrder.length * stepMs + 350; // duration
+      }
+
+      // 3x d1 heartbeat chirps
+      function playChirps() {
+        const d1 = container.querySelector('.hotspot[data-pad="d1"]');
+        if (!d1) return 0;
+        for (let c = 0; c < 3; c++) {
+          const t = 250 + c * 280;
+          setTimeout(() => d1.classList.add('swipe-glow'), t);
+          setTimeout(() => d1.classList.remove('swipe-glow'), t + 150);
+        }
+        return 250 + 3 * 280;
+      }
+
+      // Full boot sequence preview: swipe, then chirps
+      function playBootSwipe() {
+        const swipeMs = playSwipe();
+        setTimeout(playChirps, swipeMs);
+      }
+      window.playBootSwipe = playBootSwipe;
+
+      // Steady heartbeat pulse on d1, started/stopped on hover
+      let heartbeatTimer = null;
+      function startHeartbeat() {
+        const d1 = container.querySelector('.hotspot[data-pad="d1"]');
+        if (!d1 || heartbeatTimer) return;
+        const beat = () => {
+          d1.classList.add('swipe-glow');
+          setTimeout(() => d1.classList.remove('swipe-glow'), 200);
+        };
+        beat();
+        heartbeatTimer = setInterval(beat, 900);
+      }
+      function stopHeartbeat() {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
+      }
+
+      // Hover over "white swipe" / "3x d1 chirps" / "heartbeat" in boot_sequence to preview live on the pcb
+      document.querySelectorAll('.seq-hover').forEach(el => {
+        const fx = el.dataset.fx;
+        el.addEventListener('mouseenter', () => {
+          if (fx === 'swipe') playSwipe();
+          else if (fx === 'chirps') playChirps();
+          else if (fx === 'heartbeat') startHeartbeat();
+        });
+        el.addEventListener('mouseleave', () => {
+          if (fx === 'heartbeat') stopHeartbeat();
+        });
+      });
+
+      // Hover over a hardware item to highlight the matching component on the pcb
+      document.querySelectorAll('.hw-hover:not([data-combo])').forEach(el => {
+        const ids = el.dataset.highlight.split(',');
+        el.addEventListener('mouseenter', () => {
+          ids.forEach(id => {
+            const h = container.querySelector(`.hotspot[data-pad="${id}"]`);
+            if (h) h.classList.add('swipe-glow');
+          });
+        });
+        el.addEventListener('mouseleave', () => {
+          ids.forEach(id => {
+            const h = container.querySelector(`.hotspot[data-pad="${id}"]`);
+            if (h) h.classList.remove('swipe-glow');
+          });
+        });
+      });
+
+      // Hover over a boot combo row to light its 2 pads in the detection color, then blink
+      // to the confirmation color after holding ~1s (matches boot_combos_reference timing)
+      document.querySelectorAll('.hw-hover[data-combo]').forEach(el => {
+        const ids = el.dataset.highlight.split(',');
+        const colors = comboColors[el.dataset.combo];
+        let holdTimeout = null;
+        let blinkInterval = null;
+
+        el.addEventListener('mouseenter', () => {
+          const leds = ids.map(id => comboLeds[id]).filter(Boolean);
+          leds.forEach(led => {
+            led.style.setProperty('--combo-bg', comboGradient(colors.detect));
+            led.classList.add('show');
+          });
+          holdTimeout = setTimeout(() => {
+            leds.forEach(led => led.style.setProperty('--combo-bg', comboGradient(colors.confirm)));
+            let on = true;
+            blinkInterval = setInterval(() => {
+              on = !on;
+              leds.forEach(led => led.classList.toggle('show', on));
+            }, 350);
+          }, 1000);
+        });
+
+        el.addEventListener('mouseleave', () => {
+          clearTimeout(holdTimeout);
+          clearInterval(blinkInterval);
+          ids.map(id => comboLeds[id]).filter(Boolean).forEach(led => led.classList.remove('show'));
+        });
+      });
 
       // PCB Image Toggle
       const toggle = document.getElementById('pcbToggle');
