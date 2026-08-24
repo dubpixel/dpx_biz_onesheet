@@ -1,5 +1,17 @@
 # Changelog
 
+## config-reference v2.1.0 - 2026-08-24
+
+### Fixed
+- `--text-dim` was set to `#0f0808` (near-black) instead of the site-wide `#888888`, making most of the page's secondary text nearly illegible against the dark background
+
+### Added
+- Grounding note explaining what config.txt is and how to access/apply it (boot combo, desktop-only, quickstart link), broken into numbered steps instead of one run-on sentence
+- Warning note on the saving/eject gotcha, matching the main page's boot_combos card wording
+- `factory_defaults` moved to lead the page (was previously last) and made a collapsible `<details>` toggle
+- Clarified the 0-indexed config key vs 1-indexed PCB label mismatch, and that config.txt only needs to list parameters you're overriding
+- Working anchor links for "see special_keys" and "see factory_defaults" (previously just said "see below")
+
 ## dpx-interactive v2.5.0 / dpx-interactive-noSerial v2.4.0 / dpx_biz_flash v1.0.0 - 2026-08-23
 
 ### Added

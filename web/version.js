@@ -7,6 +7,6 @@ const DPX_VERSIONS = {
   "dpx-interactive-noSerial": "v2.4.0",
   "dpx_biz_synth": "v1.0.6",
   "dpx_biz_hid": "hid v1.0.1",
-  "config-reference": "v2.0.2",
+  "config-reference": "v2.1.0",
   "dpx_biz_flash": "v1.0.0"
 };

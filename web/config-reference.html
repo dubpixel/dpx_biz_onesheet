@@ -17,7 +17,7 @@
       --yellow: #ffdd4a;
       --white: #ffffff;
       --text: #e0e0e0;
-      --text-dim: #0f0808;
+      --text-dim: #888888;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -257,135 +257,23 @@
       <p class="subtitle">full parameter documentation for config.txt</p>
     </header>
 
-    <!-- Pattern -->
-    <div class="section">
-      <h2 class="section-title">parameter_pattern</h2>
-      <div class="syntax-box">pad_<span class="yellow">X</span>_<span class="blue">parameter</span>=<span class="green">value</span></div>
-      <p style="color: var(--text-dim); font-size: 0.85rem;">
-        Where <strong style="color: var(--yellow)">X</strong> = config index (0-11). See Factory Defaults below for PCB label → config key mapping.
-      </p>
+    <div class="note" style="margin-bottom: 24px; line-height: 1.7;">
+      <div style="margin-bottom: 6px;"><strong>where does config.txt come from?</strong></div>
+      <div>1. after the boot chirps finish, hold pads 2+3 — mounts the card as a plain USB drive</div>
+      <div>2. edit config.txt there in any text editor, then save</div>
+      <div>3. press <strong>boot.</strong> to apply</div>
+      <div style="margin-top: 6px; color: var(--text-dim);">desktop/laptop only · see <a href="index.html#quickstart" style="color: var(--blue);">quickstart</a> for the full boot sequence</div>
     </div>
 
-    <!-- Parameters Table -->
-    <div class="section">
-      <h2 class="section-title">parameters</h2>
-      <table>
-        <thead>
-          <tr><th>Parameter</th><th>Values</th><th>Description</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>midi_note</code></td><td><span class="value-range">0-127</span></td><td>MIDI note number (60 = middle C)</td></tr>
-          <tr><td><code>midi_velocity</code></td><td><span class="value-range">1-127</span></td><td>Note velocity (loudness)</td></tr>
-          <tr><td><code>midi_channel</code></td><td><span class="value-range">1-16</span></td><td>MIDI channel</td></tr>
-          <tr><td><code>hid_key</code></td><td><span class="value-range">see below</span></td><td>Key or key combo (e.g., <code>ctrl+alt+s</code>)</td></tr>
-          <tr><td><code>led_brightness</code></td><td><span class="value-range">0-255</span></td><td>Overall LED brightness</td></tr>
-          <tr><td><code>led_base_r</code></td><td><span class="value-range">0-255</span></td><td>Base color red component</td></tr>
-          <tr><td><code>led_base_g</code></td><td><span class="value-range">0-255</span></td><td>Base color green component</td></tr>
-          <tr><td><code>led_base_b</code></td><td><span class="value-range">0-255</span></td><td>Base color blue component</td></tr>
-          <tr><td><code>led_touch_hue_shift</code></td><td><span class="value-range">-127 to +127</span></td><td>Hue shift when touched</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Modifiers -->
-    <div class="section">
-      <h2 class="section-title">modifiers</h2>
-      <div class="keys-grid">
-        <span class="key-chip modifier-chip">ctrl</span>
-        <span class="key-chip modifier-chip">alt</span>
-        <span class="key-chip modifier-chip">shift</span>
-        <span class="key-chip modifier-chip">gui</span>
-      </div>
-      <div class="note">
-        <strong>Combine with +</strong> — e.g., <code>ctrl+alt+arrow_up</code> or <code>shift+f5</code><br>
-        Maximum 2 modifiers currently supported.
-      </div>
-    </div>
-
-    <!-- Special Keys -->
-    <div class="section">
-      <h2 class="section-title">special_keys</h2>
-      
-      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Navigation</p>
-      <div class="keys-grid" style="margin-bottom: 16px;">
-        <span class="key-chip">arrow_up</span>
-        <span class="key-chip">arrow_down</span>
-        <span class="key-chip">arrow_left</span>
-        <span class="key-chip">arrow_right</span>
-        <span class="key-chip">home</span>
-        <span class="key-chip">end</span>
-        <span class="key-chip">page_up</span>
-        <span class="key-chip">page_down</span>
-      </div>
-
-      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Function Keys</p>
-      <div class="keys-grid" style="margin-bottom: 16px;">
-        <span class="key-chip">f1</span><span class="key-chip">f2</span><span class="key-chip">f3</span>
-        <span class="key-chip">f4</span><span class="key-chip">f5</span><span class="key-chip">f6</span>
-        <span class="key-chip">f7</span><span class="key-chip">f8</span><span class="key-chip">f9</span>
-        <span class="key-chip">f10</span><span class="key-chip">f11</span><span class="key-chip">f12</span>
-      </div>
-
-      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Common</p>
-      <div class="keys-grid" style="margin-bottom: 16px;">
-        <span class="key-chip">tab</span>
-        <span class="key-chip">enter</span>
-        <span class="key-chip">esc</span>
-        <span class="key-chip">space</span>
-        <span class="key-chip">backspace</span>
-        <span class="key-chip">delete</span>
-      </div>
-
-      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Punctuation</p>
-      <div class="keys-grid">
-        <span class="key-chip">comma</span>
-        <span class="key-chip">period</span>
-        <span class="key-chip">minus</span>
-        <span class="key-chip">equal</span>
-        <span class="key-chip">[</span>
-        <span class="key-chip">]</span>
-        <span class="key-chip">\</span>
-        <span class="key-chip">;</span>
-        <span class="key-chip">'</span>
-        <span class="key-chip">`</span>
-        <span class="key-chip">/</span>
-      </div>
-    </div>
-
-    <!-- Example Config -->
-    <div class="section">
-      <h2 class="section-title">example_config</h2>
-      <div class="example-block"><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># PAD 0 (x.1 on PCB) - "Layer Up" for d3 designer</span>
-<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="key">pad_0_hid_key</span>=<span class="value">ctrl+alt+arrow_up</span>
-<span class="key">pad_0_midi_note</span>=<span class="value">60</span>
-<span class="key">pad_0_midi_velocity</span>=<span class="value">127</span>
-<span class="key">pad_0_midi_channel</span>=<span class="value">1</span>
-<span class="key">pad_0_led_brightness</span>=<span class="value">30</span>
-<span class="key">pad_0_led_base_r</span>=<span class="value">0</span>
-<span class="key">pad_0_led_base_g</span>=<span class="value">0</span>
-<span class="key">pad_0_led_base_b</span>=<span class="value">0</span>
-<span class="key">pad_0_led_touch_hue_shift</span>=<span class="value">40</span>
-
-<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># PAD 5 (x.6 on PCB) - "Next Section" - Red base color</span>
-<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="key">pad_5_hid_key</span>=<span class="value">period</span>
-<span class="key">pad_5_led_base_r</span>=<span class="value">255</span>
-<span class="key">pad_5_led_base_g</span>=<span class="value">0</span>
-<span class="key">pad_5_led_base_b</span>=<span class="value">0</span>
-
-<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># PAD 8 (x.9 on PCB) - "Play Section" / Space bar</span>
-<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="key">pad_8_hid_key</span>=<span class="value">space</span></div>
+    <div class="note warn" style="margin-bottom: 24px; line-height: 1.7;">
+      <div><strong>saving config:</strong> D1 solid white = writing, wait for heartbeat, <strong>then press boot.</strong> to apply</div>
+      <div><u>don't eject the drive</u> — ejecting just re-mounts it</div>
     </div>
 
     <!-- Default Values -->
-    <div class="section">
-      <h2 class="section-title">factory_defaults</h2>
-      <div class="defaults-grid">
+    <details class="section" id="factory_defaults" open>
+      <summary class="section-title" style="cursor: pointer;">factory_defaults</summary>
+      <div class="defaults-grid" style="margin-top: 16px;">
         
         <!-- x.1 = pad_0 -->
         <div class="pad-default">
@@ -544,6 +432,132 @@
         </div>
 
       </div>
+    </details>
+
+
+    <!-- Pattern -->
+    <div class="section">
+      <h2 class="section-title">parameter_pattern</h2>
+      <div class="syntax-box">pad_<span class="yellow">X</span>_<span class="blue">parameter</span>=<span class="green">value</span></div>
+      <p style="color: var(--text-dim); font-size: 0.85rem;">
+        Where <strong style="color: var(--yellow)">X</strong> = config index (0-11) — 0-indexed, one lower than the PCB's <strong style="color: var(--yellow)">x.1</strong>–<strong style="color: var(--yellow)">x.12</strong> silkscreen labels. See <a href="#factory_defaults" style="color: var(--blue);">factory_defaults</a> above for the full PCB label → config key mapping. Only include the parameters you want to change — anything left out keeps its factory default.
+      </p>
+    </div>
+
+    <!-- Parameters Table -->
+    <div class="section">
+      <h2 class="section-title">parameters</h2>
+      <table>
+        <thead>
+          <tr><th>Parameter</th><th>Values</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>midi_note</code></td><td><span class="value-range">0-127</span></td><td>MIDI note number (60 = middle C)</td></tr>
+          <tr><td><code>midi_velocity</code></td><td><span class="value-range">1-127</span></td><td>Note velocity (loudness)</td></tr>
+          <tr><td><code>midi_channel</code></td><td><span class="value-range">1-16</span></td><td>MIDI channel</td></tr>
+          <tr><td><code>hid_key</code></td><td><span class="value-range"><a href="#special_keys" style="color: var(--blue);">see special_keys</a></span></td><td>Key or key combo (e.g., <code>ctrl+alt+s</code>)</td></tr>
+          <tr><td><code>led_brightness</code></td><td><span class="value-range">0-255</span></td><td>Overall LED brightness</td></tr>
+          <tr><td><code>led_base_r</code></td><td><span class="value-range">0-255</span></td><td>Base color red component</td></tr>
+          <tr><td><code>led_base_g</code></td><td><span class="value-range">0-255</span></td><td>Base color green component</td></tr>
+          <tr><td><code>led_base_b</code></td><td><span class="value-range">0-255</span></td><td>Base color blue component</td></tr>
+          <tr><td><code>led_touch_hue_shift</code></td><td><span class="value-range">-127 to +127</span></td><td>Hue shift when touched</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modifiers -->
+    <div class="section">
+      <h2 class="section-title">modifiers</h2>
+      <div class="keys-grid">
+        <span class="key-chip modifier-chip">ctrl</span>
+        <span class="key-chip modifier-chip">alt</span>
+        <span class="key-chip modifier-chip">shift</span>
+        <span class="key-chip modifier-chip">gui</span>
+      </div>
+      <div class="note">
+        <strong>Combine with +</strong> — e.g., <code>ctrl+alt+arrow_up</code> or <code>shift+f5</code><br>
+        Maximum 2 modifiers currently supported.
+      </div>
+    </div>
+
+    <!-- Special Keys -->
+    <div class="section" id="special_keys">
+      <h2 class="section-title">special_keys</h2>
+      
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Navigation</p>
+      <div class="keys-grid" style="margin-bottom: 16px;">
+        <span class="key-chip">arrow_up</span>
+        <span class="key-chip">arrow_down</span>
+        <span class="key-chip">arrow_left</span>
+        <span class="key-chip">arrow_right</span>
+        <span class="key-chip">home</span>
+        <span class="key-chip">end</span>
+        <span class="key-chip">page_up</span>
+        <span class="key-chip">page_down</span>
+      </div>
+
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Function Keys</p>
+      <div class="keys-grid" style="margin-bottom: 16px;">
+        <span class="key-chip">f1</span><span class="key-chip">f2</span><span class="key-chip">f3</span>
+        <span class="key-chip">f4</span><span class="key-chip">f5</span><span class="key-chip">f6</span>
+        <span class="key-chip">f7</span><span class="key-chip">f8</span><span class="key-chip">f9</span>
+        <span class="key-chip">f10</span><span class="key-chip">f11</span><span class="key-chip">f12</span>
+      </div>
+
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Common</p>
+      <div class="keys-grid" style="margin-bottom: 16px;">
+        <span class="key-chip">tab</span>
+        <span class="key-chip">enter</span>
+        <span class="key-chip">esc</span>
+        <span class="key-chip">space</span>
+        <span class="key-chip">backspace</span>
+        <span class="key-chip">delete</span>
+      </div>
+
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">Punctuation</p>
+      <div class="keys-grid">
+        <span class="key-chip">comma</span>
+        <span class="key-chip">period</span>
+        <span class="key-chip">minus</span>
+        <span class="key-chip">equal</span>
+        <span class="key-chip">[</span>
+        <span class="key-chip">]</span>
+        <span class="key-chip">\</span>
+        <span class="key-chip">;</span>
+        <span class="key-chip">'</span>
+        <span class="key-chip">`</span>
+        <span class="key-chip">/</span>
+      </div>
+    </div>
+
+    <!-- Example Config -->
+    <div class="section">
+      <h2 class="section-title">example_config</h2>
+      <div class="example-block"><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PAD 0 (x.1 on PCB) - "Layer Up" for d3 designer</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="key">pad_0_hid_key</span>=<span class="value">ctrl+alt+arrow_up</span>
+<span class="key">pad_0_midi_note</span>=<span class="value">60</span>
+<span class="key">pad_0_midi_velocity</span>=<span class="value">127</span>
+<span class="key">pad_0_midi_channel</span>=<span class="value">1</span>
+<span class="key">pad_0_led_brightness</span>=<span class="value">30</span>
+<span class="key">pad_0_led_base_r</span>=<span class="value">0</span>
+<span class="key">pad_0_led_base_g</span>=<span class="value">0</span>
+<span class="key">pad_0_led_base_b</span>=<span class="value">0</span>
+<span class="key">pad_0_led_touch_hue_shift</span>=<span class="value">40</span>
+
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PAD 5 (x.6 on PCB) - "Next Section" - Red base color</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="key">pad_5_hid_key</span>=<span class="value">period</span>
+<span class="key">pad_5_led_base_r</span>=<span class="value">255</span>
+<span class="key">pad_5_led_base_g</span>=<span class="value">0</span>
+<span class="key">pad_5_led_base_b</span>=<span class="value">0</span>
+
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PAD 8 (x.9 on PCB) - "Play Section" / Space bar</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="key">pad_8_hid_key</span>=<span class="value">space</span></div>
     </div>
 
     <footer class="footer">
