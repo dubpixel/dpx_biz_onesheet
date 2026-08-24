@@ -20,6 +20,7 @@ Standalone, dependency-free HTML/CSS/JS site. Each page hovers over the PCB imag
 | Config reference | `src/config-reference.html` | Full `config.txt` syntax docs | |
 | Synth page | `src/dpx_biz_synth.html` | MIDI/synth-focused reference | |
 | HID page | `src/dpx_biz_hid.html` | HID-mode reference | |
+| Firmware page | `src/dpx_biz_flash.html` | How to flash the base firmware + link out to the `dpx_biz_qwikstrt` template repo for building your own | Linked from the `tools` card as "firmware" |
 | Hotspot data | `src/hotspots.json` | Touch pad coordinates/mapping | Deploy skips copy if unchanged |
 | Version config | `src/version.js` | Per-page version strings | Single source, copied to `web/` on deploy |
 | Deploy script | `deploy.sh` | Copies `src/` → `web/` | Run before pushing site updates |
@@ -59,7 +60,7 @@ There is no CI/build pipeline in this repo — pushing `main` is what goes live,
 
 ### Common Operations
 
-**Deploy site changes:** `./deploy.sh` — copies `src/dpx-interactive.html` → `web/index.html`, plus `dpx-interactive-noSerial.html`, `config-reference.html`, `dpx_biz_synth.html`, `dpx_biz_hid.html` (if present), `version.js`, `hotspots.json` (only if changed), `samples/`, and `images/` from `src/` into `web/`. It does **not** touch the firmware `.uf2`, `.psd` mockups, or anything in `zzz_archive`/`reference_documents` — those are edited/placed directly in `web/` or kept out of deploy entirely.
+**Deploy site changes:** `./deploy.sh` — copies `src/dpx-interactive.html` → `web/index.html`, plus `dpx-interactive-noSerial.html`, `config-reference.html`, `dpx_biz_synth.html`, `dpx_biz_hid.html` (if present), `dpx_biz_flash.html` (if present), `version.js`, `hotspots.json` (only if changed), `samples/`, and `images/` from `src/` into `web/`. It does **not** touch the firmware `.uf2`, `.psd` mockups, or anything in `zzz_archive`/`reference_documents` — those are edited/placed directly in `web/` or kept out of deploy entirely.
 
 **Bump a page version:** Edit the relevant key in `src/version.js`, then redeploy
 

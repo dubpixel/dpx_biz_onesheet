@@ -28,6 +28,12 @@ if [ -f "$SRC_DIR/dpx_biz_hid.html" ]; then
   cp "$SRC_DIR/dpx_biz_hid.html" "$WEB_DIR/dpx_biz_hid.html"
 fi
 
+# Copy dpx_biz_flash.html if it exists
+if [ -f "$SRC_DIR/dpx_biz_flash.html" ]; then
+  echo "Copying dpx_biz_flash.html → web/dpx_biz_flash.html"
+  cp "$SRC_DIR/dpx_biz_flash.html" "$WEB_DIR/dpx_biz_flash.html"
+fi
+
 # Copy version.js (centralized version config)
 echo "Copying version.js → web/version.js"
 cp "$SRC_DIR/version.js" "$WEB_DIR/version.js"

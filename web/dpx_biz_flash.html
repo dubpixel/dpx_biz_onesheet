@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dpx_biz Firmware v1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #1a1a1a;
+      --gold: #c9a227;
+      --blue: #4a9eff;
+      --green: #4aff7a;
+      --red: #ff4a4a;
+      --yellow: #ffdd4a;
+      --white: #ffffff;
+      --text: #e0e0e0;
+      --text-dim: #888888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header { text-align: center; margin-bottom: 20px; }
+
+    .header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 6px;
+    }
+
+    .main-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover { opacity: 0.7; }
+
+    /* PCB Section - same pattern as the main interactive page */
+    .pcb-section {
+      margin-bottom: 24px;
+      padding: 30px;
+      overflow: visible;
+    }
+
+    .pcb-map {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      border-radius: 12px;
+      border: 2px solid #333;
+      overflow: visible;
+    }
+
+    .pcb-map img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .hotspots-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .hotspot {
+      position: absolute;
+      width: 5%;
+      height: 8.7%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.2) 0%, rgba(201, 162, 39, 0.1) 70%, transparent 100%);
+      overflow: visible;
+      box-shadow: inset 0 0 8px rgba(201, 162, 39, 0.15);
+      pointer-events: none;
+    }
+
+    .hotspot::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 150%;
+      height: 150%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.8) 0%, rgba(201, 162, 39, 0.4) 35%, rgba(201, 162, 39, 0.15) 60%, rgba(201, 162, 39, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .hotspot.show::before { opacity: 1; }
+
+    .pcb-caption {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 10px;
+    }
+
+    .section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid #333;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .steps { counter-reset: step; list-style: none; }
+
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 6px 0 6px 34px;
+      font-size: 0.9rem;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(201, 162, 39, 0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .steps code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold);
+      background: rgba(201, 162, 39, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    .pcb-hover {
+      text-decoration: underline dotted;
+      text-underline-offset: 3px;
+      cursor: help;
+      color: var(--white);
+      transition: color 0.2s ease;
+    }
+
+    .pcb-hover:hover { color: var(--gold); }
+
+    .note {
+      background: rgba(201, 162, 39, 0.1);
+      border-left: 3px solid var(--gold);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      margin-top: 16px;
+    }
+
+    .note strong { color: var(--gold); }
+
+    .note.warn {
+      background: rgba(255, 74, 74, 0.1);
+      border-left-color: var(--red);
+    }
+
+    .note.warn strong { color: var(--red); }
+
+    .example-block {
+      background: #0d0d0d;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      color: var(--green);
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s ease;
+    }
+
+    .link-card:hover { border-color: var(--gold); }
+    .link-card:last-child { margin-bottom: 0; }
+
+    .link-card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 2px;
+    }
+
+    .link-card-desc { font-size: 0.8rem; color: var(--text-dim); }
+    .link-card-arrow { color: var(--gold); font-family: 'JetBrains Mono', monospace; }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #222;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-logo { height: 32px; width: auto; }
+    .footer-tagline { font-size: 0.7rem; color: var(--text-dim); margin-top: 6px; }
+    .footer-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>dpx_biz firmware</h1>
+    <p class="subtitle">flash the base build, or start your own from the template</p>
+  </header>
+
+  <div class="main-container">
+    <a href="index.html" class="back-link">← back to interactive map</a>
+
+    <!-- PCB Visualization -->
+    <div class="pcb-section">
+      <div class="pcb-map">
+        <img src="images/pcb-photo.png" alt="dpx_biz PCB">
+        <div class="hotspots-container" id="hotspotsContainer"></div>
+      </div>
+      <div class="pcb-caption">hover the steps below to see the buttons</div>
+    </div>
+
+    <!-- Enter Bootloader -->
+    <div class="section">
+      <h2 class="section-title">enter_bootloader</h2>
+      <ol class="steps">
+        <li>Hold the <span class="pcb-hover" data-highlight="SW2"><strong>RESET</strong></span> button (top-right, near the USB port)</li>
+        <li>While holding RESET, press and release the <span class="pcb-hover" data-highlight="SW1"><strong>BOOT</strong></span> button</li>
+        <li>Release RESET</li>
+        <li>The card appears as a <code>RPI-RP2</code> USB drive on your computer</li>
+      </ol>
+      <div class="note warn">
+        <strong>⚠ desktop or laptop only</strong> — this needs a real computer, phones/tablets don't support flashing new firmware.
+      </div>
+    </div>
+
+    <!-- Flash Firmware -->
+    <div class="section">
+      <h2 class="section-title">flash_the_base_firmware</h2>
+      <ol class="steps">
+        <li>Download the current firmware: <a href="dpx_biz_frm_v0d5d7.uf2" style="color: var(--blue);">dpx_biz_frm_v0d5d7.uf2</a></li>
+        <li>With the card in bootloader mode (see above), drag the <code>.uf2</code> file onto the <code>RPI-RP2</code> drive</li>
+        <li>The card reboots automatically once the copy finishes — you're done</li>
+      </ol>
+      <div class="note">
+        <strong>this is the default/base firmware</strong> — same one this whole reference site documents (d3 designer key mappings, MIDI notes, config.txt system). Reflashing it is mainly for recovering a bricked card or resetting to a known-good build.
+      </div>
+    </div>
+
+    <!-- Build Your Own -->
+    <div class="section">
+      <h2 class="section-title">build_your_own</h2>
+      <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 16px;">
+        Want to go beyond what <code>config.txt</code> can do — different sensing behavior, new modes, a totally different project on the same hardware? Start from the firmware template instead of this card's default build.
+      </p>
+
+      <a href="https://dubpixel.github.io/dpx_biz_qwikstrt/" target="_blank" class="link-card">
+        <div>
+          <div class="link-card-title">dpx_biz_qwikstrt — live template site</div>
+          <div class="link-card-desc">walkthrough for starting your own firmware from scratch</div>
+        </div>
+        <span class="link-card-arrow">→</span>
+      </a>
+      <a href="https://github.com/dubpixel/dpx_biz_qwikstrt" target="_blank" class="link-card">
+        <div>
+          <div class="link-card-title">dpx_biz_qwikstrt — repo</div>
+          <div class="link-card-desc">clone it, open in PlatformIO, start building</div>
+        </div>
+        <span class="link-card-arrow">→</span>
+      </a>
+
+      <p style="color: var(--text-dim); font-size: 0.85rem; margin: 16px 0 8px;">once you've got the template open, building for the card is:</p>
+      <div class="example-block">pio run -e pico</div>
+      <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 8px;">output lands at <code style="font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(201,162,39,0.1); padding: 2px 6px; border-radius: 4px;">.pio/build/pico/firmware.uf2</code> — drag that to <code style="font-family: 'JetBrains Mono', monospace; color: var(--gold); background: rgba(201,162,39,0.1); padding: 2px 6px; border-radius: 4px;">RPI-RP2</code> the same way as above.</p>
+    </div>
+
+    <footer class="footer">
+      <img src="images/logo.png" alt="dubpixel" class="footer-logo">
+      <div class="footer-tagline">making strange things daily</div>
+      <div class="footer-version" id="pageVersion"></div>
+    </footer>
+  </div>
+
+  <script>
+    // Boot/reset button hotspots on the pcb photo (same coordinate space as the main page)
+    const HOTSPOT_COORDS = {
+      'SW1': { x: 1100, y: 438 },
+      'SW2': { x: 855, y: 27 }
+    };
+    const IMG_WIDTH = 1176;
+    const IMG_HEIGHT = 676;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('hotspotsContainer');
+
+      Object.entries(HOTSPOT_COORDS).forEach(([id, coords]) => {
+        const el = document.createElement('div');
+        el.className = 'hotspot';
+        el.dataset.pad = id;
+        el.style.left = ((coords.x / IMG_WIDTH) * 100 - 2.5) + '%';
+        el.style.top = ((coords.y / IMG_HEIGHT) * 100 - 4.35) + '%';
+        container.appendChild(el);
+      });
+
+      document.querySelectorAll('.pcb-hover').forEach(el => {
+        const id = el.dataset.highlight;
+        const target = () => document.querySelector(`.hotspot[data-pad="${id}"]`);
+        el.addEventListener('mouseenter', () => { const h = target(); if (h) h.classList.add('show'); });
+        el.addEventListener('mouseleave', () => { const h = target(); if (h) h.classList.remove('show'); });
+      });
+    });
+  </script>
+
+  <script src="version.js"></script>
+  <script>document.getElementById('pageVersion').textContent = DPX_VERSIONS['dpx_biz_flash'];</script>
+</body>
+</html>

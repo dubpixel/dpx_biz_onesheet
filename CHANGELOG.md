@@ -1,5 +1,12 @@
 # Changelog
 
+## dpx-interactive v2.5.0 / dpx-interactive-noSerial v2.4.0 / dpx_biz_flash v1.0.0 - 2026-08-23
+
+### Added
+- New `dpx_biz_flash.html` page - how to enter bootloader and flash the base firmware, plus links out to the `dpx_biz_qwikstrt` template repo for building your own firmware. Includes the real PCB image with hover-highlighted BOOT/RESET buttons, matching the main page's interaction style
+- "firmware" button in the tools card (index/noSerial pages), in its own muted sage-green color distinct from the blue/gold tool buttons
+- Footer github link now points to `dpx_biz_qwikstrt` (the firmware template) instead of this onesheet repo
+
 ## dpx-interactive v2.4.2 / dpx-interactive-noSerial v2.3.2 - 2026-08-23
 
 ### Fixed
