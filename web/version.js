@@ -3,8 +3,8 @@
 // Each HTML file references its version by page key.
 
 const DPX_VERSIONS = {
-  "dpx-interactive": "v2.4.1",
-  "dpx-interactive-noSerial": "v2.3.1",
+  "dpx-interactive": "v2.4.2",
+  "dpx-interactive-noSerial": "v2.3.2",
   "dpx_biz_synth": "v1.0.6",
   "dpx_biz_hid": "hid v1.0.1",
   "config-reference": "v2.0.2"

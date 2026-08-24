@@ -902,7 +902,7 @@
           <div class="hw-info">
             <div class="hw-name">jumper.</div>
             <div class="hw-meta">GPIO 20 — persistent mode select</div>
-            <div class="hw-desc">open = HID keyboard (default) · closed = MIDI. this sets the mode every boot — separate from the one-time FORCE MIDI combo below</div>
+            <div class="hw-desc">open = HID keyboard (default) · closed = MIDI. this sets the mode every boot — separate from the one-time FORCE MIDI combo</div>
           </div>
         </div>
       </div>
@@ -914,11 +914,11 @@
         <a href="#" class="syntax-link" style="margin-bottom: 10px;" onclick="document.querySelector('.pcb-map').scrollIntoView({behavior:'smooth', block:'center'}); playBootSwipe(); return false;">▶ replay boot swipe on pcb</a>
 
         <div class="sequence-steps">
-          <div class="seq-step warning"><span class="seq-num">1</span><span class="seq-text"><span class="seq-hover" data-fx="swipe">white swipe</span> <strong>⚠ don't touch pads ⚠</strong></span></div>
-          <div class="seq-step warning"><span class="seq-num">2</span><span class="seq-text"><span class="seq-hover" data-fx="chirps">3× d1 chirps</span> <strong>⚠ don't touch pads ⚠</strong></span></div>
+          <div class="seq-step warning"><span class="seq-num">1</span><span class="seq-text"><span class="seq-hover" data-fx="swipe">white swipe</span> <strong>⚠ don't touch, calibrating ⚠</strong></span></div>
+          <div class="seq-step warning"><span class="seq-num">2</span><span class="seq-text"><span class="seq-hover" data-fx="chirps">3× d1 chirps</span> <strong>⚠ don't touch, setting baseline ⚠</strong></span></div>
           <div class="seq-step highlight"><span class="seq-num">3</span><span class="seq-text"><strong>HOLD PADS</strong> — use boot_combos for special modes</span></div>
-          <div class="seq-step"><span class="seq-num">4</span><span class="seq-text">detection color <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;opacity:0.6;"></span></span></span></div>
-          <div class="seq-step"><span class="seq-num">5</span><span class="seq-text">confirm blink <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #555;opacity:0.6;"></span><span style="font-size:0.7rem;color:#555;">→</span><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;border:1px solid #666;box-shadow:0 0 6px rgba(201,162,39,0.8);"></span></span></span></div>
+          <div class="seq-step"><span class="seq-num">4</span><span class="seq-text">detection color <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span class="color-dot" style="background: var(--blue)"></span></span></span></div>
+          <div class="seq-step"><span class="seq-num">5</span><span class="seq-text"><span class="seq-hover" data-fx="confirm">confirm blink</span> <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span class="color-dot" style="background: var(--green)"></span></span></span></div>
           <div class="seq-step"><span class="seq-num">6</span><span class="seq-text"><span class="seq-hover" data-fx="heartbeat">heartbeat</span> = ready <svg style="display:inline-block;width:10px;height:10px;margin-left:6px;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 6v6M9 9h6"/></svg></span></div>
         </div>
       </div>
@@ -926,7 +926,7 @@
       <!-- Boot Combos -->
       <div class="card">
         <h2 class="card-title">boot_combos</h2>
-        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">hold a combo while powering on — CONFIG mounts the card as a plain USB drive, no software required, just edit config.txt in any text editor</div>
+        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">after the 3 heartbeat chirps, hold a combo — CONFIG mounts the card as a plain USB drive, no software required, just edit config.txt in any text editor</div>
         <div class="combo-grid">
           <div class="combo-row combo-config hw-hover" data-highlight="2,3" data-combo="config">
             <div class="combo-pads">
@@ -941,7 +941,7 @@
             <div class="combo-colors">
               <div class="color-dot" style="background: var(--blue)"></div>
               <span>→</span>
-              <div class="color-dot blink" style="background: var(--green)"></div>
+              <div class="color-dot confirm-dot" style="background: var(--green)"></div>
             </div>
           </div>
 
@@ -958,7 +958,7 @@
             <div class="combo-colors">
               <div class="color-dot" style="background: var(--red)"></div>
               <span>→</span>
-              <div class="color-dot blink" style="background: var(--white)"></div>
+              <div class="color-dot confirm-dot" style="background: var(--white)"></div>
             </div>
           </div>
 
@@ -975,17 +975,13 @@
             <div class="combo-colors">
               <div class="color-dot" style="background: var(--yellow)"></div>
               <span>→</span>
-              <div class="color-dot blink" style="background: var(--red)"></div>
+              <div class="color-dot confirm-dot" style="background: var(--red)"></div>
             </div>
           </div>
         </div>
         <div class="tip-item combo-note" style="margin-top: 10px; border-top: 1px solid #2a2a2a; padding-top: 10px;">
           <span class="tip-icon">!</span>
-          <span><strong>priority:</strong> CONFIG &gt; RESET &gt; FORCE MIDI</span>
-        </div>
-        <div class="tip-item combo-note">
-          <span class="tip-icon">!</span>
-          <span><strong>saving:</strong> D1 solid white = writing, wait for heartbeat, <strong>then press boot.</strong> to apply</span>
+          <span><strong>saving config:</strong> D1 solid white = writing, wait for heartbeat, <strong>then press boot.</strong> to apply</span>
         </div>
         <div class="tip-item combo-note">
           <span class="tip-icon">!</span>
@@ -1301,16 +1297,30 @@
         heartbeatTimer = null;
       }
 
-      // Hover over "white swipe" / "3x d1 chirps" / "heartbeat" in boot_sequence to preview live on the pcb
+      // Hover over "white swipe" / "3x d1 chirps" / "confirm blink" / "heartbeat" in
+      // boot_sequence to preview live on the pcb
+      let heartbeatStartTimer = null;
       document.querySelectorAll('.seq-hover').forEach(el => {
         const fx = el.dataset.fx;
         el.addEventListener('mouseenter', () => {
           if (fx === 'swipe') playSwipe();
           else if (fx === 'chirps') playChirps();
-          else if (fx === 'heartbeat') startHeartbeat();
+          else if (fx === 'confirm') {
+            const dot = el.closest('.seq-text').querySelector('.color-dot');
+            if (dot) dot.classList.add('blink');
+          } else if (fx === 'heartbeat') {
+            const chirpsMs = playChirps();
+            heartbeatStartTimer = setTimeout(startHeartbeat, chirpsMs);
+          }
         });
         el.addEventListener('mouseleave', () => {
-          if (fx === 'heartbeat') stopHeartbeat();
+          if (fx === 'confirm') {
+            const dot = el.closest('.seq-text').querySelector('.color-dot');
+            if (dot) dot.classList.remove('blink');
+          } else if (fx === 'heartbeat') {
+            clearTimeout(heartbeatStartTimer);
+            stopHeartbeat();
+          }
         });
       });
 
@@ -1336,6 +1346,7 @@
       document.querySelectorAll('.hw-hover[data-combo]').forEach(el => {
         const ids = el.dataset.highlight.split(',');
         const colors = comboColors[el.dataset.combo];
+        const confirmDot = el.querySelector('.confirm-dot');
         let holdTimeout = null;
         let blinkInterval = null;
 
@@ -1347,6 +1358,7 @@
           });
           holdTimeout = setTimeout(() => {
             leds.forEach(led => led.style.setProperty('--combo-bg', comboGradient(colors.confirm)));
+            if (confirmDot) confirmDot.classList.add('blink');
             let on = true;
             blinkInterval = setInterval(() => {
               on = !on;
@@ -1359,6 +1371,7 @@
           clearTimeout(holdTimeout);
           clearInterval(blinkInterval);
           ids.map(id => comboLeds[id]).filter(Boolean).forEach(led => led.classList.remove('show'));
+          if (confirmDot) confirmDot.classList.remove('blink');
         });
       });
 

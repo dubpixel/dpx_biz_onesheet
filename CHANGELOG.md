@@ -1,5 +1,19 @@
 # Changelog
 
+## dpx-interactive v2.4.2 / dpx-interactive-noSerial v2.3.2 - 2026-08-23
+
+### Fixed
+- Boot combo intro text said to hold the combo "while powering on" - actually needs to be after the 3 heartbeat chirps
+- Confirm-blink color dots (boot_sequence step 5, and all three boot_combos rows) were always blinking - now solid until hovered, then blink only during the confirm phase, matching the PCB LED behavior
+- Removed dangling "below" from the jumper description text
+
+### Changed
+- "saving:" label renamed to "saving config:" in the boot_combos footer
+- Removed the "combo priority" line from the boot_combos footer (redundant/confusing)
+- boot_sequence warning steps now explain why: "don't touch, calibrating" / "don't touch, setting baseline"
+- boot_sequence detection/confirm dots now use real combo colors (blue/green) instead of generic gold
+- Hovering "heartbeat = ready" now plays the 3 chirps before the steady pulse starts
+
 ## dpx-interactive v2.4.1 / dpx-interactive-noSerial v2.3.1 - 2026-08-22
 
 ### Added
