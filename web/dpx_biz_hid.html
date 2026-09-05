@@ -445,7 +445,7 @@
       </div>
       <div class="matched-pad">
         <span class="input-label">pad:</span>
-        <div class="pad-indicator empty" id="padIndicator">—</div>
+        <div class="pad-indicator empty" id="padIndicator">.</div>
       </div>
     </div>
 
@@ -650,7 +650,7 @@
 
     function deactivateAllPads() {
       document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-      padIndicator.textContent = '—';
+      padIndicator.textContent = '.';
       padIndicator.classList.add('empty');
     }
 

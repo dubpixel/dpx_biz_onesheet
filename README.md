@@ -63,7 +63,7 @@
 
 
 ## About The Project
-this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB business card. it's a standalone html page that lets you hover over each touch pad to see what it does—boot combos, HID mappings, MIDI notes, LED colors, and more.
+this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB business card. it's a standalone html page that lets you hover over each touch pad to see what it does.boot combos, HID mappings, MIDI notes, LED colors, and more.
 
 **key features:**
 - **quickstart card** – plug-in walkthrough up front for first-time users, no prior context needed
@@ -75,7 +75,7 @@ this is the **interactive quick-reference** for the dpx_biz capacitive touch PCB
 - **config reference** – full config.txt syntax documentation included
 - **works offline** – just open the html file in any browser, no server needed
 
-_the dpx_biz is a business card that actually does something—it's a USB HID device that can send keystrokes, mouse clicks, or MIDI notes. this onesheet helps new users figure out what each pad does without reading a full manual._
+_the dpx_biz is a business card that actually does something.it's a USB HID device that can send keystrokes, mouse clicks, or MIDI notes. this onesheet helps new users figure out what each pad does without reading a full manual._
 
 <details>
 <summary>Images </summary>
@@ -114,7 +114,7 @@ _the dpx_biz is a business card that actually does something—it's a USB HID de
   * any modern web browser (chrome, firefox, safari, edge)
   * a dpx_biz card (contact i@dubpixel.tv for details)
   * usb-c cable
-  * **a desktop or laptop** — mounting the card as a drive, editing config.txt, flashing firmware, and the serial debug panel all require a real computer; phones/tablets aren't supported
+  * **a desktop or laptop**. mounting the card as a drive, editing config.txt, flashing firmware, and the serial debug panel all require a real computer; phones/tablets aren't supported
   
 ### Installation
 
@@ -152,7 +152,7 @@ _the dpx_biz is a business card that actually does something—it's a USB HID de
 
 ### config.txt reference
 
-for full config syntax, open `src/config-reference.html`—it covers all parameters like `sensitivity`, `led_color`, `midi_channel`, and more.
+for full config syntax, open `src/config-reference.html`.it covers all parameters like `sensitivity`, `led_color`, `midi_channel`, and more.
 
 _see the interactive page for the complete pad→key→midi mapping table_
 
@@ -211,9 +211,9 @@ This work is licensed under CC BY-SA 4.0 with the following additional restricti
 
 __In plain terms:__
 
-* Use it, learn from it, build on it — go buck wild!!
+* Use it, learn from it, build on it. go buck wild!!
 * Give credit back to this project
-* _Don't_ just clone this and sell it— __that's not allowed__
+* _Don't_ just clone this and sell it. __that's not allowed__
 * Remixes, improvements, and real derivatives? Sell them, just keep the attribution and share-alike
 * Share your modifications under these same terms
 
