@@ -1108,23 +1108,35 @@
     <!-- Quickstart -->
     <div class="card quickstart-card" id="quickstart">
       <h2 class="card-title">quickstart</h2>
-      <div class="qs-notice">desktop or laptop only — mounting as a drive, config editing, firmware flashing, and the serial debug panel don't work on phones or tablets</div>
+      <div class="qs-notice">desktop or laptop only. mounting as a drive, config editing, firmware flashing, and the serial debug panel don't work on phones or tablets</div>
       <div class="qs-steps">
         <div class="qs-step">
           <span class="qs-num">1</span>
-          <div class="qs-text"><strong>plug in via USB-C.</strong> boot animation runs (~2s) — <span class="seq-hover" data-fx="swipe">white swipe</span>, then <span class="seq-hover" data-fx="chirps">3 heartbeat chirps</span>. don't touch pads during this part.</div>
+          <div class="qs-text"><strong>plug in via USB-C.</strong>
+            <div style="margin:6px 0; font-style:italic;">where's the usb? it's that card edge over by the power light... yeah, that thing. weird right?</div>
+            <div style="margin:10px 0 4px;">boot animation runs (~2s):</div>
+            <ul style="margin:0 0 8px 18px; padding:0;">
+              <li><span class="seq-hover" data-fx="swipe">white swipe</span></li>
+              <li><span class="seq-hover" data-fx="chirps">3 heartbeat chirps</span></li>
+            </ul>
+            don't touch pads during this part.
+          </div>
         </div>
         <div class="qs-step">
           <span class="qs-num">2</span>
-          <div class="qs-text"><strong>once the chirps finish, it's ready.</strong> by default it's a keyboard, mapped for an app called <em>disguise d3 designer</em> — touching a pad sends a real keystroke to whatever's focused on your computer. totally harmless — just don't touch pads while typing something important.</div>
+          <div class="qs-text"><strong>once the chirps finish, it's ready.</strong> by default it's a keyboard, mapped for an app called <em>disguise d3 designer</em>. touching a pad sends a real keystroke to whatever's focused on your computer. totally harmless. just don't touch pads while typing something important.</div>
         </div>
         <div class="qs-step">
           <span class="qs-num">3</span>
-          <div class="qs-text"><strong>want to hear it instead?</strong> after the chirps finish, hold pads 8+9 for about a second (yellow → blinking red) to force MIDI mode, then open the <a href="dpx_biz_synth.html">web synth</a> — no other software needed.</div>
+          <div class="qs-text"><strong>want to hear it instead?</strong> after the chirps finish, hold pads 8+9 for about a second (yellow → blinking red) to force MIDI mode, then open the <a href="dpx_biz_synth.html">web synth</a>. no other software needed.</div>
         </div>
         <div class="qs-step">
           <span class="qs-num">4</span>
-          <div class="qs-text"><strong>want to remap it?</strong> after the chirps finish, hold pads 2+3 for about a second (blue → blinking green) — it mounts as a plain USB drive with a text file, no app required. see <code>boot_combos</code> and <code>config_syntax</code> below.</div>
+          <div class="qs-text"><strong>want to remap it?</strong> after the chirps finish, hold pads 2+3 for about a second (blue → blinking green). it mounts as a plain USB drive with a text file, no app required. see <code>boot_combos</code> and <code>config_syntax</code> below.</div>
+        </div>
+        <div class="qs-step">
+          <span class="qs-num">5</span>
+          <div class="qs-text"><strong>want to hack me more?</strong> <a href="https://dubpixel.github.io/dpx_biz_qwikstrt/">go here!</a> minimal MIDI/HID example firmware, a clean file to start from.</div>
         </div>
       </div>
     </div>
@@ -1165,7 +1177,7 @@
           </div>
           <div class="hw-info">
             <div class="hw-name">boot.</div>
-            <div class="hw-meta">SW1 — reboot</div>
+            <div class="hw-meta">SW1. reboot</div>
             <div class="hw-desc">push to reboot the device</div>
           </div>
         </div>
@@ -1179,7 +1191,7 @@
           </div>
           <div class="hw-info">
             <div class="hw-name">reset.</div>
-            <div class="hw-meta">SW2 — bootloader</div>
+            <div class="hw-meta">SW2. bootloader</div>
             <div class="hw-desc">hold during reboot</div>
           </div>
         </div>
@@ -1210,8 +1222,8 @@
           </div>
           <div class="hw-info">
             <div class="hw-name">jumper.</div>
-            <div class="hw-meta">GPIO 20 — persistent mode select</div>
-            <div class="hw-desc">open = HID keyboard (default) · closed = MIDI. this sets the mode every boot — separate from the one-time FORCE MIDI combo</div>
+            <div class="hw-meta">GPIO 20. persistent mode select</div>
+            <div class="hw-desc">open = HID keyboard (default) · closed = MIDI. this sets the mode every boot. separate from the one-time FORCE MIDI combo</div>
           </div>
         </div>
       </div>
@@ -1225,7 +1237,7 @@
         <div class="sequence-steps">
           <div class="seq-step warning"><span class="seq-num">1</span><span class="seq-text"><span class="seq-hover" data-fx="swipe">white swipe</span> <strong>⚠ don't touch, calibrating ⚠</strong></span></div>
           <div class="seq-step warning"><span class="seq-num">2</span><span class="seq-text"><span class="seq-hover" data-fx="chirps">3× d1 chirps</span> <strong>⚠ don't touch, setting baseline ⚠</strong></span></div>
-          <div class="seq-step highlight"><span class="seq-num">3</span><span class="seq-text"><strong>HOLD PADS</strong> — use boot_combos for special modes</span></div>
+          <div class="seq-step highlight"><span class="seq-num">3</span><span class="seq-text"><strong>HOLD PADS</strong>. use boot_combos for special modes</span></div>
           <div class="seq-step"><span class="seq-num">4</span><span class="seq-text">detection color <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span class="color-dot" style="background: var(--blue)"></span></span></span></div>
           <div class="seq-step"><span class="seq-num">5</span><span class="seq-text"><span class="seq-hover" data-fx="confirm">confirm blink</span> <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;"><span class="color-dot" style="background: var(--green)"></span></span></span></div>
           <div class="seq-step"><span class="seq-num">6</span><span class="seq-text"><span class="seq-hover" data-fx="heartbeat">heartbeat</span> = ready <svg style="display:inline-block;width:10px;height:10px;margin-left:6px;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 6v6M9 9h6"/></svg></span></div>
@@ -1235,7 +1247,7 @@
       <!-- Boot Combos -->
       <div class="card">
         <h2 class="card-title">boot_combos</h2>
-        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">after the 3 heartbeat chirps, hold a combo — CONFIG mounts the card as a plain USB drive, no software required, just edit config.txt in any text editor</div>
+        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">after the 3 heartbeat chirps, hold a combo. CONFIG mounts the card as a plain USB drive, no software required, just edit config.txt in any text editor</div>
         <div class="combo-grid">
           <div class="combo-row combo-config hw-hover" data-highlight="2,3" data-combo="config">
             <div class="combo-pads">
@@ -1358,7 +1370,7 @@
         <span>firmware</span>
       </a>
       <!-- QUICKSTART -->
-      <a href="#quickstart" class="footer-link">
+      <a href="https://dubpixel.github.io/dpx_biz_qwikstrt/" class="footer-link" target="_blank">
         <!-- racecar icon -->
         <svg viewBox="0 0 24 24"><path d="M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm14 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM4 11l1-4h14l1 4M5 16h14v-4l-1-5H6L5 12v4zm0-8h14l-1-2H6L5 8z"/></svg>
         <span>quickstart</span>
